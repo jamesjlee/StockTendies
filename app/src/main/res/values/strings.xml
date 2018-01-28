@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">StockTendies</string>
+    <string name="totalTendiesValue">Total Tendies Value</string>
+    <string name="dollarSign">$</string>
+    <string name="tendiesPercentDayChange">Day Change</string>
+    <string name="tenderName">Tender Name</string>
+    <string name="tenderHoldings">Holdings</string>
+    <string name="tenderPrices">Price</string>
+    <string name="tendiesPercentSymbol">%</string>
+    <string name="tendiesPercentPlusSymbol">+</string>
+    <string name="tendiesPercentMinusSymbol">-</string>
+</resources>

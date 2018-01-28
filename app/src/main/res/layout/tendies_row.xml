@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/rowTenderImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintTop_toBottomOf="@+id/tenderName"/>
+
+    <TextView
+        android:id="@+id/rowTenderName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintLeft_toRightOf="@+id/rowTenderImage"
+        app:layout_constraintBottom_toBottomOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toTopOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toBottomOf="@+id/tenderName">
+    </TextView>
+
+    <TextView
+        android:id="@+id/rowTenderHoldings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintLeft_toRightOf="@+id/rowTenderName"
+        app:layout_constraintRight_toLeftOf="@+id/rowTenderPriceSymbol"
+        app:layout_constraintBottom_toBottomOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toTopOf="@+id/rowTenderImage">
+    </TextView>
+
+    <TextView
+        android:id="@+id/rowTenderPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="@string/tendiesPercentSymbol"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintLeft_toRightOf="@+id/rowTenderHoldings"
+        app:layout_constraintBottom_toBottomOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toTopOf="@+id/rowTenderImage">
+    </TextView>
+
+    <TextView
+        android:id="@+id/rowTenderPriceSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintRight_toLeftOf="@+id/rowTenderPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toTopOf="@+id/rowTenderImage">
+    </TextView>
+
+    <TextView
+        android:id="@+id/rowTenderPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/rowTenderImage"
+        app:layout_constraintTop_toTopOf="@+id/rowTenderImage">
+    </TextView>
+
+</android.support.constraint.ConstraintLayout>
+
