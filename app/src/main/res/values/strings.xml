@@ -9,4 +9,7 @@
     <string name="tendiesPercentSymbol">%</string>
     <string name="tendiesPercentPlusSymbol">+</string>
     <string name="tendiesPercentMinusSymbol">-</string>
+    <string name="addTendies">Add</string>
+    <string name="resetTendies">Reset</string>
+    <string name="aboutTendies">About </string>
 </resources>

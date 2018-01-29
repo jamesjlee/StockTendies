@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.crisdev.stocktendies.AddTendiesToPortfolio">
+
+    <SearchView
+        android:id="@+id/searchForTendies"
+        android:queryHint="Search for tendies..."
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:iconifiedByDefault="false"
+        android:layout_height="wrap_content">
+    </SearchView>
+
+
+</android.support.constraint.ConstraintLayout>
