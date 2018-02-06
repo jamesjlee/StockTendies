@@ -2,8 +2,8 @@
     <string name="app_name">StockTendies</string>
     <string name="totalTendiesValue">Total Tendies Value</string>
     <string name="dollarSign">$</string>
-    <string name="tendiesPercentDayChange">Day Change</string>
-    <string name="tenderName">Tender Name</string>
+    <string name="totalTendiesPercentDayChange">Total Day Change</string>
+    <string name="tendieName">Tendie</string>
     <string name="tenderHoldings">Holdings</string>
     <string name="tenderPrices">Price</string>
     <string name="tendiesPercentSymbol">%</string>
@@ -12,4 +12,7 @@
     <string name="addTendies">Add</string>
     <string name="resetTendies">Reset</string>
     <string name="aboutTendies">About </string>
+    <string name="tendiesPrefs">TendiesPrefsFile</string>
+    <string name="tenderDayChange">Change</string>
+    <string name="sharesText">Ts</string>
 </resources>

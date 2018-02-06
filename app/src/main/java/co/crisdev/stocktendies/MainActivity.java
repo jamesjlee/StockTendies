@@ -2,24 +2,44 @@ package co.crisdev.stocktendies;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
 public class MainActivity extends ListActivity {
-
-    private ArrayList<Tender> tendiesList;
     private SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        setContentView(R.layout.activity_main);
+
+        loadSwipeRefreshLayout();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSwipeRefreshLayout();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -42,7 +62,9 @@ public class MainActivity extends ListActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(MainActivity.this, "Dropped all your tendies.", Toast.LENGTH_SHORT).show();
-                                tendiesList.clear();
+                                sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+                                sharedPreferences.edit().remove("tendiesList").commit();
+                                loadSwipeRefreshLayout();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
                 break;
@@ -56,19 +78,31 @@ public class MainActivity extends ListActivity {
         return true;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void loadSwipeRefreshLayout() {
+        Set<String> tendiesSet = new HashSet<>();
+        ArrayList<Tender> tendiesList = new ArrayList<Tender>();
 
-        tendiesList = new ArrayList<Tender>();
-        tendiesList.add(new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), "Venus", 2.22, "$", new BigDecimal("0.02")));
-        tendiesList.add(new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), "Venus", 2.22,   "$", new BigDecimal("0.02")));
-        tendiesList.add(new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), "Venus", 2.22,  "$", new BigDecimal("0.02")));
-        tendiesList.add(new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), "Venus", 2.22,  "$", new BigDecimal("0.02")));
-        tendiesList.add(new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), "Venus", 2.22,  "$", new BigDecimal("0.02")));
+        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+        tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
 
-        MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);
-        setListAdapter(listAdapter);
+        System.out.println(Integer.toString(tendiesSet.size()));
+
+        if(tendiesSet != null) {
+            for(String tendie : tendiesSet) {
+                try {
+                    Stock stock = YahooFinance.get(tendie);
+                    BigDecimal price = stock.getQuote().getPrice();
+                    BigDecimal change = stock.getQuote().getChangeInPercent();
+                    BigDecimal marketValue = new BigDecimal(1);
+                    Tender tender = new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), tendie.toUpperCase(), 0, price, change, marketValue);
+                    tendiesList.add(tender);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);
+            setListAdapter(listAdapter);
+        }
     }
 }

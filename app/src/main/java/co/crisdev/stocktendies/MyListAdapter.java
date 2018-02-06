@@ -32,15 +32,17 @@ public class MyListAdapter extends ArrayAdapter<Tender> {
 
         ImageView tenderDrawable = (ImageView) rowView.findViewById(R.id.rowTenderImage);
         TextView tenderName = (TextView) rowView.findViewById(R.id.rowTenderName);
-        TextView tenderHoldings = (TextView) rowView.findViewById(R.id.rowTenderHoldings);
-        TextView tenderSymbol = (TextView) rowView.findViewById(R.id.rowTenderPriceSymbol);
+        TextView tenderMarketValue = (TextView) rowView.findViewById(R.id.rowTenderMarketValue);
         TextView tenderPrice = (TextView) rowView.findViewById(R.id.rowTenderPrice);
+        TextView tenderDayChange = (TextView) rowView.findViewById(R.id.rowTenderDayChange);
+        TextView tenderHoldings = (TextView) rowView.findViewById(R.id.rowTenderHoldings);
 
         tenderDrawable.setImageDrawable(tendersArrayList.get(position).getTenderImage());
         tenderName.setText(tendersArrayList.get(position).getName());
         tenderHoldings.setText(Double.toString(tendersArrayList.get(position).getHoldings()));
-        tenderSymbol.setText(tendersArrayList.get(position).getSymbol());
         tenderPrice.setText(tendersArrayList.get(position).getPrice().toString());
+        tenderMarketValue.setText(tendersArrayList.get(position).getMarketValue().toString());
+        tenderDayChange.setText(tendersArrayList.get(position).getDayChangePercent().toString());
 
         return rowView;
     }

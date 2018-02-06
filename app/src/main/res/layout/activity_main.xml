@@ -6,6 +6,41 @@
     android:layout_height="match_parent"
     tools:context="co.crisdev.stocktendies.MainActivity">
 
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline0"
+        app:layout_constraintGuide_percent="0.00"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline1"
+        app:layout_constraintGuide_percent="0.25"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        app:layout_constraintGuide_percent="0.50"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        app:layout_constraintGuide_percent="0.75"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline4"
+        app:layout_constraintGuide_percent="1.00"
+        android:orientation="vertical"/>
+
     <TextView
         android:id="@+id/mainTendiesTitle"
         android:layout_width="wrap_content"
@@ -13,17 +48,18 @@
         android:text="@string/totalTendiesValue"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/mainTendiesValue"
-        app:layout_constraintLeft_toRightOf="parent" />
+        app:layout_constraintLeft_toRightOf="@+id/guideline0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"/>
 
     <TextView
         android:id="@+id/tendiesPercentDayChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tendiesPercentDayChange"
+        android:text="@string/totalTendiesPercentDayChange"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toRightOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"/>
 
     <TextView
         android:id="@+id/dollarSign"
@@ -31,9 +67,8 @@
         android:layout_height="wrap_content"
         android:text="@string/dollarSign"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/tenderName"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tenderName"
         app:layout_constraintRight_toLeftOf="@+id/mainTendiesValue"/>
 
     <TextView
@@ -44,59 +79,63 @@
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/tenderName"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintLeft_toRightOf="@+id/dollarSign"/>
+        app:layout_constraintLeft_toRightOf="@+id/guideline0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"/>
 
     <TextView
         android:id="@+id/tendiesPercentDayChangeVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="24.50"
-        android:textSize="16sp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainTendiesValue"
-        app:layout_constraintRight_toLeftOf="@+id/tendiesPercentSymbol"
-        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue" />
-
-
-    <TextView
-        android:id="@+id/tendiesPercentMinusSymbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tendiesPercentMinusSymbol"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/mainTendiesValue"
-        app:layout_constraintRight_toLeftOf="@+id/tendiesPercentDayChangeVal"
-        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue" />
+        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue"
+        app:layout_constraintLeft_toRightOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4" />
 
     <TextView
         android:id="@+id/tendiesPercentSymbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tendiesPercentSymbol"
-        android:textSize="16sp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainTendiesValue"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue" />
+        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue"
+        app:layout_constraintLeft_toRightOf="@+id/tendiesPercentDayChangeVal" />
 
     <TextView
         android:id="@+id/tenderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tenderName"
+        android:text="@string/tendieName"
         android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline0"
+        app:layout_constraintEnd_toEndOf="@+id/guideline1"
         app:layout_constraintBottom_toTopOf="@+id/refreshTendies"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesValue">
 
     </TextView>
 
     <TextView
-        android:id="@+id/tenderHoldings"
+        android:id="@+id/tenderHoldingsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/tenderHoldings"
-        app:layout_constraintLeft_toRightOf="@+id/tenderName"
-        app:layout_constraintRight_toLeftOf="@+id/tenderPrice"
+        app:layout_constraintStart_toEndOf="@+id/guideline1"
+        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/tenderName"
+        app:layout_constraintBottom_toTopOf="@+id/tenderName">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tenderDayChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/tenderDayChange"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tenderName"
         app:layout_constraintBottom_toTopOf="@+id/tenderName">
     </TextView>
@@ -107,10 +146,12 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/tenderPrices"
+        app:layout_constraintStart_toEndOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/tenderName"
-        app:layout_constraintBottom_toTopOf="@+id/tenderName"
-        app:layout_constraintRight_toLeftOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/tenderName">
     </TextView>
+
 
 
     <android.support.v4.widget.SwipeRefreshLayout
