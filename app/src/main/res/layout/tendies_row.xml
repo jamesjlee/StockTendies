@@ -9,7 +9,7 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline0"
+        android:id="@+id/rGuideline0"
         app:layout_constraintGuide_percent=".00"
         android:orientation="vertical"/>
 
@@ -17,28 +17,28 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline1"
+        android:id="@+id/rGuideline1"
         app:layout_constraintGuide_percent=".25"
         android:orientation="vertical"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline2"
+        android:id="@+id/rGuideline2"
         app:layout_constraintGuide_percent=".50"
         android:orientation="vertical"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline3"
+        android:id="@+id/rGuideline3"
         app:layout_constraintGuide_percent=".75"
         android:orientation="vertical"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline4"
+        android:id="@+id/rGuideline4"
         app:layout_constraintGuide_percent="1.00"
         android:orientation="vertical"/>
 
@@ -57,8 +57,8 @@
         android:text="AMD"
         app:layout_constraintTop_toBottomOf="@+id/tenderName"
         app:layout_constraintLeft_toRightOf="@+id/rowTenderImage"
-        app:layout_constraintStart_toEndOf="@+id/guideline0"
-        app:layout_constraintEnd_toEndOf="@+id/guideline1">
+        app:layout_constraintStart_toEndOf="@+id/rGuideline0"
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline1">
     </TextView>
 
     <TextView
@@ -66,10 +66,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:text="4213"
         app:layout_constraintTop_toBottomOf="@+id/tenderHoldingsText"
-        app:layout_constraintStart_toEndOf="@+id/guideline1"
-        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/rGuideline1"
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline2"
         app:layout_constraintRight_toLeftOf="@+id/rowTenderSharesText">
     </TextView>
 
@@ -84,24 +83,13 @@
     </TextView>
 
     <TextView
-        android:id="@+id/rowTenderMarketValueDollarSign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dollarSign"
-        android:textSize="12sp"
-        app:layout_constraintRight_toLeftOf="@+id/rowTenderMarketValue"
-        app:layout_constraintTop_toBottomOf="@+id/rowTenderHoldings"></TextView>
-
-    <TextView
         android:id="@+id/rowTenderMarketValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1234"
         android:textSize="12sp"
-        app:layout_constraintLeft_toRightOf="@+id/rowTenderMarketValueDollarSign"
         app:layout_constraintTop_toBottomOf="@+id/rowTenderHoldings"
-        app:layout_constraintStart_toEndOf="@+id/guideline1"
-        app:layout_constraintEnd_toEndOf="@+id/guideline2">
+        app:layout_constraintStart_toEndOf="@+id/rGuideline1"
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline2">
 
     </TextView>
 
@@ -112,8 +100,8 @@
         android:textSize="12sp"
         android:text="1234"
         app:layout_constraintTop_toBottomOf="@+id/tenderDayChange"
-        app:layout_constraintStart_toEndOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/rGuideline2"
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline3"
         >
     </TextView>
 
@@ -127,15 +115,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tenderDayChange">
     </TextView>
 
-    <TextView
-        android:id="@+id/rowTenderPriceSymbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="@string/dollarSign"
-        app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
-        app:layout_constraintRight_toLeftOf="@+id/rowTenderPrice">
-    </TextView>
 
     <TextView
         android:id="@+id/rowTenderPrice"
@@ -144,8 +123,8 @@
         android:textSize="12sp"
         android:text="123"
         app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
-        app:layout_constraintStart_toEndOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="@+id/guideline4">
+        app:layout_constraintStart_toEndOf="@+id/rGuideline3"
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline4">
     </TextView>
 
     <ImageView

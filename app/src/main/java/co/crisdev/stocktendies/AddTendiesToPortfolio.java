@@ -2,6 +2,7 @@ package co.crisdev.stocktendies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import java.util.Set;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
+
+import static co.crisdev.stocktendies.MainActivity.symbol;
 
 
 /**
@@ -42,13 +45,16 @@ public class AddTendiesToPortfolio extends Activity {
                 Set<String> tendiesList = new HashSet<>();
                 try {
                     Stock stock = YahooFinance.get(s);
-                    tendiesList.add(s);
                     SharedPreferences.Editor editor;
                     sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
                     editor = sharedPreferences.edit();
+                    tendiesList = sharedPreferences.getStringSet("tendiesList", tendiesList);
+                    tendiesList.add(s.toUpperCase());
                     editor.putStringSet("tendiesList", tendiesList);
                     editor.commit();
                     isTender = true;
+
+                    switchView(s, symbol, stock.getQuote().getPrice());
                 } catch (IOException e) {
                     Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please find a valid ticker.", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -61,5 +67,14 @@ public class AddTendiesToPortfolio extends Activity {
                 return false;
             }
         });
+    }
+
+    public void switchView(String s, String symbol, BigDecimal price) {
+        Intent intentBundle = new Intent(AddTendiesToPortfolio.this, EnterTendiesHoldings.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ticker", s);
+        bundle.putString("price", symbol+price.toString());
+        intentBundle.putExtras(bundle);
+        startActivity(intentBundle);
     }
 }

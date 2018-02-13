@@ -16,8 +16,9 @@ public class Tender {
     private Drawable tenderImageFooter;
     private BigDecimal marketValue;
     private BigDecimal dayChangePercent;
+    private String symbol;
 
-    public Tender(Drawable tenderImage, String name, int holdings, BigDecimal price, BigDecimal dayChangePercent, BigDecimal marketValue) {
+    public Tender(Drawable tenderImage, String name, int holdings, BigDecimal price, BigDecimal dayChangePercent, BigDecimal marketValue, String symbol) {
         super();
         this.tenderImage = tenderImage;
         this.name = name;
@@ -25,6 +26,7 @@ public class Tender {
         this.price = price;
         this.dayChangePercent = dayChangePercent;
         this.marketValue = marketValue;
+        this.symbol = symbol;
     }
 
     public Drawable getTenderImage() {
@@ -81,5 +83,13 @@ public class Tender {
 
     public void setMarketValue(BigDecimal marketValue) {
         this.marketValue = marketValue;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }

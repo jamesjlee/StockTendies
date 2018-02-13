@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline0"
+        app:layout_constraintGuide_percent="0.00"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline1"
+        app:layout_constraintGuide_percent="0.25"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline2"
+        app:layout_constraintGuide_percent="0.50"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline3"
+        app:layout_constraintGuide_percent="0.75"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline4"
+        app:layout_constraintGuide_percent="1.00"
+        android:orientation="horizontal"/>
+
+
+    <TextView
+        android:id="@+id/ticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
+        app:layout_constraintBottom_toTopOf="@id/currentPrice"/>
+
+    <TextView
+        android:id="@+id/notesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notesLabel"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/notesInput"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
+
+    <TextView
+        android:id="@+id/tradePriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tradePriceLabel"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tradePrice"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2" />
+
+    <TextView
+        android:id="@+id/currentPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/currentPriceLabel"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/currentPrice"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"/>
+
+    <TextView
+        android:id="@+id/holdingsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/holdingsLabel"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/holdings"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"/>
+
+    <EditText
+        android:id="@+id/notesInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        app:layout_constraintLeft_toRightOf="@id/notesLabel"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
+
+    <TextView
+        android:id="@+id/currentPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="13"
+        app:layout_constraintLeft_toRightOf="@id/currentPriceLabel"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"/>
+
+    <EditText
+        android:id="@+id/tradePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintLeft_toRightOf="@id/tradePriceLabel"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2" />
+
+    <EditText
+        android:id="@+id/holdings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintLeft_toRightOf="@id/holdingsLabel"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"/>
+
+</android.support.constraint.ConstraintLayout>

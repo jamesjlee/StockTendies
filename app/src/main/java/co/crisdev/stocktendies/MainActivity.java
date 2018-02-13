@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,16 +25,29 @@ import yahoofinance.YahooFinance;
 
 public class MainActivity extends ListActivity {
     private SharedPreferences sharedPreferences;
+    public static SwipeRefreshLayout tendiesRefreshLayout;
+    public static final String symbol = "$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_main);
+        tendiesRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshTendies);
 
         loadSwipeRefreshLayout();
+
+        tendiesRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadSwipeRefreshLayout();
+                Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
+                tendiesRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -63,7 +78,7 @@ public class MainActivity extends ListActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(MainActivity.this, "Dropped all your tendies.", Toast.LENGTH_SHORT).show();
                                 sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
-                                sharedPreferences.edit().remove("tendiesList").commit();
+                                sharedPreferences.edit().clear().commit();
                                 loadSwipeRefreshLayout();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
@@ -80,12 +95,14 @@ public class MainActivity extends ListActivity {
 
     public void loadSwipeRefreshLayout() {
         Set<String> tendiesSet = new HashSet<>();
+        Set<String> holdingsList = new HashSet<>();
+        int holdings = 0;
+
         ArrayList<Tender> tendiesList = new ArrayList<Tender>();
 
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
         tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
 
-        System.out.println(Integer.toString(tendiesSet.size()));
 
         if(tendiesSet != null) {
             for(String tendie : tendiesSet) {
@@ -93,8 +110,16 @@ public class MainActivity extends ListActivity {
                     Stock stock = YahooFinance.get(tendie);
                     BigDecimal price = stock.getQuote().getPrice();
                     BigDecimal change = stock.getQuote().getChangeInPercent();
-                    BigDecimal marketValue = new BigDecimal(1);
-                    Tender tender = new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), tendie.toUpperCase(), 0, price, change, marketValue);
+
+                    holdingsList = sharedPreferences.getStringSet(tendie.toUpperCase()+"_holdings_list", holdingsList);
+
+                    for(String holding: holdingsList) {
+                        holdings += Integer.parseInt(holding);
+                    }
+
+                    BigDecimal marketValue = price.multiply(new BigDecimal(holdings));
+
+                    Tender tender = new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), tendie.toUpperCase(), holdings, price, change, marketValue, symbol);
                     tendiesList.add(tender);
                 } catch (IOException e) {
                     e.printStackTrace();
