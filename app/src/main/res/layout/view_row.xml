@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrGuideline0"
+        app:layout_constraintGuide_percent=".00"
+        android:orientation="vertical"/>
+
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrGuideline1"
+        app:layout_constraintGuide_percent=".25"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrGuideline2"
+        app:layout_constraintGuide_percent=".50"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrGuideline3"
+        app:layout_constraintGuide_percent=".75"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrGuideline4"
+        app:layout_constraintGuide_percent="1.00"
+        android:orientation="vertical"/>
+
+    <TextView
+        android:id="@+id/vrTendieName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tendieName"
+        app:layout_constraintBottom_toTopOf="@android:id/list"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline0"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline1"/>
+
+    <TextView
+        android:id="@+id/vrTendieHolding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/holdingsLabel"
+        app:layout_constraintBottom_toTopOf="@android:id/list"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline1"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline2"/>
+
+    <TextView
+        android:id="@+id/vrTendiePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tenderPrices"
+        app:layout_constraintBottom_toTopOf="@android:id/list"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline2"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline3"/>
+
+    <TextView
+        android:id="@+id/vrTendieNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notesLabel"
+        app:layout_constraintBottom_toTopOf="@android:id/list"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline3"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline4"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/vrTendieName"/>
+
+
+</android.support.constraint.ConstraintLayout>

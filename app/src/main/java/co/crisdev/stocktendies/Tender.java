@@ -3,6 +3,7 @@ package co.crisdev.stocktendies;
 import android.graphics.drawable.Drawable;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 
 /**
  * Created by lee on 1/28/18.
@@ -92,4 +93,5 @@ public class Tender {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
 }

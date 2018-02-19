@@ -42,19 +42,10 @@ public class AddTendiesToPortfolio extends Activity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 boolean isTender = false;
-                Set<String> tendiesList = new HashSet<>();
                 try {
                     Stock stock = YahooFinance.get(s);
-                    SharedPreferences.Editor editor;
-                    sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
-                    editor = sharedPreferences.edit();
-                    tendiesList = sharedPreferences.getStringSet("tendiesList", tendiesList);
-                    tendiesList.add(s.toUpperCase());
-                    editor.putStringSet("tendiesList", tendiesList);
-                    editor.commit();
-                    isTender = true;
-
                     if(stock.getQuote().getPrice() != null) {
+                        isTender = true;
                         switchView(s, symbol, stock.getQuote().getPrice());
                     } else {
                         Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ.", Toast.LENGTH_SHORT).show();

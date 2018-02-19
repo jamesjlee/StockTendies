@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -15,12 +16,20 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import yahoofinance.Stock;
@@ -33,6 +42,10 @@ public class MainActivity extends ListActivity {
     private TextView totalTendiesValue;
     private BigDecimal mainTendiesVal;
     public static final String symbol = "$";
+    private String todayDate;
+    private String yesterdayDate;
+    private BigDecimal totalDayPercentChange;
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100.00);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +56,24 @@ public class MainActivity extends ListActivity {
 
         setContentView(R.layout.activity_main);
         tendiesRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshTendies);
-        totalDayChange = (TextView) findViewById(R.id.tenderDayChange);
+        totalDayChange = (TextView) findViewById(R.id.tendiesPercentDayChangeVal);
         totalTendiesValue = (TextView) findViewById(R.id.mainTendiesValue);
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        todayDate = df.format(today);
+        cal.add(Calendar.DATE, -1);
+        yesterdayDate = df.format(cal.getTime());
 
         loadSwipeRefreshLayout();
-
-        totalTendiesValue.setText(mainTendiesVal.toString());
 
         tendiesRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 loadSwipeRefreshLayout();
                 Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
-                tendiesRefreshLayout.setRefreshing(false);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadSwipeRefreshLayout();
     }
 
     @Override
@@ -89,12 +99,12 @@ public class MainActivity extends ListActivity {
                                 Toast.makeText(MainActivity.this, "Dropped all your tendies.", Toast.LENGTH_SHORT).show();
                                 sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
                                 sharedPreferences.edit().clear().commit();
+                                updatePercentChangeColor(totalDayPercentChange);
                                 loadSwipeRefreshLayout();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
                 break;
             case R.id.about:
-
                 break;
             default:
                 break;
@@ -104,41 +114,104 @@ public class MainActivity extends ListActivity {
     }
 
     public void loadSwipeRefreshLayout() {
-        Set<String> tendiesSet = new HashSet<>();
-        Set<String> holdingsList = new HashSet<>();
+        tendiesRefreshLayout.setRefreshing(true);
+        Set<String> tendiesSet = new LinkedHashSet<>();
+        String count = "";
+        String yesterdaysMarketVal = "";
+        BigDecimal cumulativeMarketValAtTradePrices = new BigDecimal(0);
         mainTendiesVal = new BigDecimal(0);
         int holdings = 0;
+        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+
 
         ArrayList<Tender> tendiesList = new ArrayList<Tender>();
-
-        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
         tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
+        yesterdaysMarketVal = sharedPreferences.getString(yesterdayDate + "market-val", yesterdaysMarketVal);
 
+        for(String tendie : tendiesSet) {
+            try {
+                Stock stock = YahooFinance.get(tendie);
+                BigDecimal price = stock.getQuote().getPrice();
+                BigDecimal change = stock.getQuote().getChangeInPercent();
+                count = sharedPreferences.getString(tendie + "_count_", count);
 
-        if(tendiesSet != null) {
-            for(String tendie : tendiesSet) {
-                try {
-                    Stock stock = YahooFinance.get(tendie);
-                    BigDecimal price = stock.getQuote().getPrice();
-                    BigDecimal change = stock.getQuote().getChangeInPercent();
-                    holdingsList = sharedPreferences.getStringSet(tendie.toUpperCase()+"_holdings_list", holdingsList);
+                int countNum = Integer.parseInt(count);
+                for(int i=1; i<=countNum; i++) {
+                    String holding = "";
+                    String tradePrice = "";
 
-                    for(String holding: holdingsList) {
-                        holdings += Integer.parseInt(holding);
-                    }
+                    holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
+                    tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
 
-                    BigDecimal marketValue = price.multiply(new BigDecimal(holdings));
-                    mainTendiesVal = marketValue.add(marketValue);
+                    int holdingNum = Integer.parseInt(holding);
+                    holdings += holdingNum;
 
-                    Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher), tendie.toUpperCase(), holdings, price, change, marketValue, symbol);
-                    tendiesList.add(tender);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
+                    BigDecimal holdingBigDecimal = new BigDecimal(holding);
+
+                    cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
                 }
+
+                BigDecimal marketValue = price.multiply(new BigDecimal(holdings));
+                mainTendiesVal = mainTendiesVal.add(marketValue);
+
+                Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price, change, cumulativeMarketValAtTradePrices, symbol);
+                tendiesList.add(tender);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!mainTendiesVal.equals(BigDecimal.ZERO)) {
+            if(yesterdaysMarketVal != null && !yesterdaysMarketVal.isEmpty()) {
+                totalDayPercentChange = percentChange(mainTendiesVal, new BigDecimal(yesterdaysMarketVal));
+            } else {
+                totalDayPercentChange = percentChange(mainTendiesVal, cumulativeMarketValAtTradePrices);
             }
 
-            MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);
-            setListAdapter(listAdapter);
+            updatePercentChangeColor(totalDayPercentChange);
+
+            sharedPreferences.edit().putString(todayDate + "market-val", totalDayPercentChange.toString());
+            sharedPreferences.edit().commit();
+            totalDayChange.setText(totalDayPercentChange.toString());
+        } else {
+            totalDayChange.setText("0.00");
+        }
+
+        totalTendiesValue.setText(cumulativeMarketValAtTradePrices.toString());
+
+        Collections.sort(tendiesList, new CustomComparator());
+        MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);
+        setListAdapter(listAdapter);
+        tendiesRefreshLayout.setRefreshing(false);
+    }
+
+    public static BigDecimal percentChange(BigDecimal first, BigDecimal second) {
+        double firstDouble = first.doubleValue();
+        double secondDouble = second.doubleValue();
+        double oneHundred = 100.00;
+
+        double res = ((firstDouble-secondDouble) / secondDouble) * oneHundred;
+        BigDecimal resBigDecimal = new BigDecimal(res, MathContext.DECIMAL64);
+        resBigDecimal = resBigDecimal.setScale(2, RoundingMode.HALF_UP);
+
+        return resBigDecimal;
+    }
+
+    public void updatePercentChangeColor(BigDecimal totalDayPercentChange) {
+        if(totalDayPercentChange.compareTo(BigDecimal.ZERO) > 0) {
+            totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.positive));
+        } else if (totalDayPercentChange.compareTo(BigDecimal.ZERO) < 0) {
+            totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.negative));
+        } else {
+            totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.neutral));
+        }
+    }
+
+    public class CustomComparator implements Comparator<Tender> {
+        @Override
+        public int compare(Tender tender, Tender t1) {
+            return tender.getName().toString().compareTo(t1.getName().toString());
         }
     }
 }

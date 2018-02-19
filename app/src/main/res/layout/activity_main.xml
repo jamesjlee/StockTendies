@@ -69,18 +69,18 @@
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
         app:layout_constraintBottom_toTopOf="@+id/tenderName"
-        app:layout_constraintRight_toLeftOf="@+id/mainTendiesValue" />
+        app:layout_constraintRight_toLeftOf="@+id/guideline1"
+        app:layout_constraintLeft_toRightOf="@+id/guideline0"/>
 
     <TextView
         android:id="@+id/mainTendiesValue"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="0"
+        android:text="0.00"
         app:layout_constraintBottom_toTopOf="@+id/tenderName"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintLeft_toRightOf="@+id/guideline0"
-        app:layout_constraintRight_toLeftOf="@+id/guideline2"/>
+        app:layout_constraintLeft_toRightOf="@+id/dollarSign" />
 
     <TextView
         android:id="@+id/tendiesPercentDayChangeVal"

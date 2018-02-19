@@ -3,8 +3,9 @@ package co.crisdev.stocktendies;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +67,18 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         tenderMarketValue.setText(tendersArrayList.get(position).getSymbol()+tendersArrayList.get(position).getMarketValue().toString());
         tenderDayChange.setText(tendersArrayList.get(position).getDayChangePercent().toString());
 
+
+        SharedPreferences.Editor editor;
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchView(tenderName.getText().toString(), tenderPrice.getText().toString(), view);
+            }
+        });
+
         tenderDrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,9 +103,17 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                 }
                                 editor.putStringSet("tendiesList", tendiesSet).commit();
 
-                                editor.remove(tenderName.getText().toString()+"_holdings_list").commit();
-                                editor.remove(tenderName.getText().toString()+"_trade_price_list").commit();
-                                editor.remove(tenderName.getText().toString()+"_notes_list").commit();
+
+                                String count = "";
+                                count = sharedPreferences.getString(tenderName.getText() + "_count_", count);
+                                int countNum = Integer.parseInt(count);
+
+                                for(int i=1; i<=countNum; i++) {
+                                    editor.remove(tenderName.getText() + "_holding_count_" + Integer.toString(i)).commit();
+                                    editor.remove(tenderName.getText() + "_trade_price_count_" + Integer.toString(i)).commit();
+                                    editor.remove(tenderName.getText() + "_note_count_" + Integer.toString(i)).commit();
+                                    editor.remove(tenderName.getText() + "_count_" + i);
+                                }
 
                                 //remove item from list view
                                 tendersArrayList.remove(position);
@@ -105,6 +126,16 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         });
 
         return rowView;
+    }
+
+
+    public void switchView(String ticker, String price, View view) {
+        Intent intentBundle = new Intent(view.getContext(), ViewRow.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ticker", ticker);
+        bundle.putString("price", price);
+        intentBundle.putExtras(bundle);
+        view.getContext().startActivity(intentBundle);
     }
 
 }

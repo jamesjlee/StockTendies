@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -57,7 +59,6 @@ public class EnterTendiesHoldings extends Activity {
                 tickerTv.setText(ticker.toUpperCase());
                 currPriceTv.setText(currPrice);
                 tradePriceEt.setText(currPrice.substring(1, currPrice.length()));
-                tradePriceEt.setText(currPrice.substring(1, currPrice.length()));
             }
         }
     }
@@ -72,25 +73,38 @@ public class EnterTendiesHoldings extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save:
-                Set<String> holdingsList = new HashSet<>();
-                Set<String> tradePriceList = new HashSet<>();
-                Set<String> notesList = new HashSet<>();
+                Set<String> tendiesList = new LinkedHashSet<>();
+//                Set<String> holdingsList = new LinkedHashSet<>();
+//                Set<String> tradePriceList = new LinkedHashSet<>();
+//                Set<String> notesList = new LinkedHashSet<>();
+                String holding = "";
+                String tradePrice = "";
+                String note = "";
+                String count = "";
+                String countStr = "";
+                int nCount = 0;
                 SharedPreferences.Editor editor;
                 sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
 
-                if(!sharedPreferences.getStringSet(tickerTv.getText()+"_holdings_list", holdingsList).isEmpty() && !sharedPreferences.getStringSet(tickerTv.getText()+"_trade_price_list", tradePriceList).isEmpty() && !sharedPreferences.getStringSet(tickerTv.getText()+"_notes_list", notesList).isEmpty()) {
-                    holdingsList = sharedPreferences.getStringSet(tickerTv.getText()+"_holdings_list", holdingsList);
-                    tradePriceList = sharedPreferences.getStringSet(tickerTv.getText()+"_trade_price_list", tradePriceList);
-                    notesList = sharedPreferences.getStringSet(tickerTv.getText()+"_notes_list", notesList);
+                tendiesList = sharedPreferences.getStringSet("tendiesList", tendiesList);
+
+                if(tendiesList.contains(tickerTv.getText().toString())) {
+                    count = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", count);
+                    nCount = Integer.parseInt(count) + 1;
+                    editor.putString(tickerTv.getText().toString() + "_count_", Integer.toString(nCount)).commit();
+                } else {
+                    editor.putString(tickerTv.getText().toString() + "_count_", "1").commit();
                 }
-                holdingsList.add(holdingsTv.getText().toString());
-                tradePriceList.add(tradePriceEt.getText().toString());
-                notesList.add(notes.getText().toString());
-                editor.putStringSet(tickerTv.getText()+"_holdings_list", holdingsList);
-                editor.putStringSet(tickerTv.getText()+"_trade_price_list", tradePriceList);
-                editor.putStringSet(tickerTv.getText()+"_notes_list", tradePriceList);
-                editor.commit();
+
+                tendiesList.add(tickerTv.getText().toString());
+                editor.putStringSet("tendiesList", tendiesList).commit();
+
+                countStr = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", countStr);
+
+                editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).commit();
+                editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).commit();
+                editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).commit();
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
