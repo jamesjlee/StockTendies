@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +49,15 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         TextView tenderDayChange = (TextView) rowView.findViewById(R.id.rowTenderDayChange);
         TextView tenderHoldings = (TextView) rowView.findViewById(R.id.rowTenderHoldings);
         ImageView tenderDrop = (ImageView) rowView.findViewById(R.id.rowTenderDrop);
+
+        // add color to percent change
+        if(tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) > 0) {
+            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.positive));
+        } else if (tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) < 0){
+            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.negative));
+        } else {
+            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.neutral));
+        }
 
         tenderDrawable.setImageDrawable(tendersArrayList.get(position).getTenderImage());
         tenderName.setText(tendersArrayList.get(position).getName());

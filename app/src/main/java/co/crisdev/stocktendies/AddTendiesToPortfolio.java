@@ -54,9 +54,13 @@ public class AddTendiesToPortfolio extends Activity {
                     editor.commit();
                     isTender = true;
 
-                    switchView(s, symbol, stock.getQuote().getPrice());
+                    if(stock.getQuote().getPrice() != null) {
+                        switchView(s, symbol, stock.getQuote().getPrice());
+                    } else {
+                        Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ.", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (IOException e) {
-                    Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please find a valid ticker.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ.", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
                 return isTender;

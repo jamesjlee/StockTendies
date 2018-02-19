@@ -12,7 +12,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -26,6 +29,9 @@ import yahoofinance.YahooFinance;
 public class MainActivity extends ListActivity {
     private SharedPreferences sharedPreferences;
     public static SwipeRefreshLayout tendiesRefreshLayout;
+    private TextView totalDayChange;
+    private TextView totalTendiesValue;
+    private BigDecimal mainTendiesVal;
     public static final String symbol = "$";
 
     @Override
@@ -37,8 +43,12 @@ public class MainActivity extends ListActivity {
 
         setContentView(R.layout.activity_main);
         tendiesRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshTendies);
+        totalDayChange = (TextView) findViewById(R.id.tenderDayChange);
+        totalTendiesValue = (TextView) findViewById(R.id.mainTendiesValue);
 
         loadSwipeRefreshLayout();
+
+        totalTendiesValue.setText(mainTendiesVal.toString());
 
         tendiesRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -96,6 +106,7 @@ public class MainActivity extends ListActivity {
     public void loadSwipeRefreshLayout() {
         Set<String> tendiesSet = new HashSet<>();
         Set<String> holdingsList = new HashSet<>();
+        mainTendiesVal = new BigDecimal(0);
         int holdings = 0;
 
         ArrayList<Tender> tendiesList = new ArrayList<Tender>();
@@ -110,7 +121,6 @@ public class MainActivity extends ListActivity {
                     Stock stock = YahooFinance.get(tendie);
                     BigDecimal price = stock.getQuote().getPrice();
                     BigDecimal change = stock.getQuote().getChangeInPercent();
-
                     holdingsList = sharedPreferences.getStringSet(tendie.toUpperCase()+"_holdings_list", holdingsList);
 
                     for(String holding: holdingsList) {
@@ -118,8 +128,9 @@ public class MainActivity extends ListActivity {
                     }
 
                     BigDecimal marketValue = price.multiply(new BigDecimal(holdings));
+                    mainTendiesVal = marketValue.add(marketValue);
 
-                    Tender tender = new Tender(getResources().getDrawable(R.drawable.ic_launcher_foreground), tendie.toUpperCase(), holdings, price, change, marketValue, symbol);
+                    Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher), tendie.toUpperCase(), holdings, price, change, marketValue, symbol);
                     tendiesList.add(tender);
                 } catch (IOException e) {
                     e.printStackTrace();
