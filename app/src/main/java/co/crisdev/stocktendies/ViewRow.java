@@ -71,23 +71,6 @@ public class ViewRow extends ListActivity {
             viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), tradePrice.toString(), note, percentChange.toString()));
         }
 
-//        holding = sharedPreferences.getString()
-//
-//        if(holdingsArr.size() == tradePriceArr.size() && notesArr.size() == tradePriceArr.size()) {
-//            for(int i=0; i<holdingsArr.size();i++) {
-//                BigDecimal holding = new BigDecimal(holdingsArr.get(i));
-//                System.out.println(holding.toString());
-//                BigDecimal tradePrice = new BigDecimal(tradePriceArr.get(i).toString());
-//                BigDecimal marketVal = holding.multiply(tradePrice);
-//                BigDecimal currentMarketVal = currPrice.multiply(holding);
-//                String notes = notesArr.get(i);
-//
-//                BigDecimal percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
-//
-//                viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), tradePrice.toString(), notes, percentChange.toString()));
-//            }
-//        }
-
         ViewRowListAdapter listAdapter = new ViewRowListAdapter(this, viewRowTendiesList);
         setListAdapter(listAdapter);
     }

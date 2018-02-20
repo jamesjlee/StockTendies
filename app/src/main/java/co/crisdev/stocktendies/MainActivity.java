@@ -120,7 +120,6 @@ public class MainActivity extends ListActivity {
         String yesterdaysMarketVal = "";
         BigDecimal cumulativeMarketValAtTradePrices = new BigDecimal(0);
         mainTendiesVal = new BigDecimal(0);
-        int holdings = 0;
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
 
 
@@ -133,6 +132,8 @@ public class MainActivity extends ListActivity {
                 Stock stock = YahooFinance.get(tendie);
                 BigDecimal price = stock.getQuote().getPrice();
                 BigDecimal change = stock.getQuote().getChangeInPercent();
+                int holdings = 0;
+                BigDecimal cumulativeForCurrentStock = new BigDecimal(0);
                 count = sharedPreferences.getString(tendie + "_count_", count);
 
                 int countNum = Integer.parseInt(count);
@@ -150,12 +151,13 @@ public class MainActivity extends ListActivity {
                     BigDecimal holdingBigDecimal = new BigDecimal(holding);
 
                     cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                    cumulativeForCurrentStock = cumulativeForCurrentStock.add(price.multiply(holdingBigDecimal));
                 }
 
                 BigDecimal marketValue = price.multiply(new BigDecimal(holdings));
                 mainTendiesVal = mainTendiesVal.add(marketValue);
 
-                Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price, change, cumulativeMarketValAtTradePrices, symbol);
+                Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price.setScale(2, RoundingMode.HALF_UP), change, cumulativeForCurrentStock.setScale(2, RoundingMode.HALF_UP), symbol);
                 tendiesList.add(tender);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -199,9 +201,9 @@ public class MainActivity extends ListActivity {
     }
 
     public void updatePercentChangeColor(BigDecimal totalDayPercentChange) {
-        if(totalDayPercentChange.compareTo(BigDecimal.ZERO) > 0) {
+        if(totalDayPercentChange.compareTo(new BigDecimal(0.00)) > 0) {
             totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.positive));
-        } else if (totalDayPercentChange.compareTo(BigDecimal.ZERO) < 0) {
+        } else if (totalDayPercentChange.compareTo(new BigDecimal(0.00)) < 0) {
             totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.negative));
         } else {
             totalDayChange.setTextColor(ContextCompat.getColor(this, R.color.neutral));

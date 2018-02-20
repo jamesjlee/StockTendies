@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -112,7 +113,7 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                     editor.remove(tenderName.getText() + "_holding_count_" + Integer.toString(i)).commit();
                                     editor.remove(tenderName.getText() + "_trade_price_count_" + Integer.toString(i)).commit();
                                     editor.remove(tenderName.getText() + "_note_count_" + Integer.toString(i)).commit();
-                                    editor.remove(tenderName.getText() + "_count_" + i);
+                                    editor.remove(tenderName.getText() + "_count_" + Integer.toString(i)).commit();
                                 }
 
                                 //remove item from list view
