@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import static co.crisdev.stocktendies.MainActivity.symbol;
 
 public class AddTendiesToPortfolio extends Activity {
     private SearchView searchViewForTendies;
+    private ProgressBar spinner;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -37,21 +39,27 @@ public class AddTendiesToPortfolio extends Activity {
         setContentView(R.layout.add_tendies_to_portfolio);
 
         searchViewForTendies = (SearchView) findViewById(R.id.searchForTendies);
+        spinner = (ProgressBar) findViewById(R.id.addToPortfolioSpinner);
+
 
         searchViewForTendies.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 boolean isTender = false;
                 try {
+                    spinner.setVisibility(View.VISIBLE);
                     Stock stock = YahooFinance.get(s);
                     if(stock.getQuote().getPrice() != null) {
                         isTender = true;
+                        spinner.setVisibility(View.GONE);
                         switchView(s, symbol, stock.getQuote().getPrice());
                     } else {
-                        Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
+                        spinner.setVisibility(View.GONE);
                     }
                 } catch (IOException e) {
-                    Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ.", Toast.LENGTH_LONG).show();
+                    spinner.setVisibility(View.GONE);
+                    Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
                 return isTender;

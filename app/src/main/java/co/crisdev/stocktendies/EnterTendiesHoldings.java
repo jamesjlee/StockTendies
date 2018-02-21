@@ -1,9 +1,7 @@
 package co.crisdev.stocktendies;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,12 +9,8 @@ import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -74,12 +68,6 @@ public class EnterTendiesHoldings extends Activity {
         switch (item.getItemId()) {
             case R.id.save:
                 Set<String> tendiesList = new LinkedHashSet<>();
-//                Set<String> holdingsList = new LinkedHashSet<>();
-//                Set<String> tradePriceList = new LinkedHashSet<>();
-//                Set<String> notesList = new LinkedHashSet<>();
-                String holding = "";
-                String tradePrice = "";
-                String note = "";
                 String count = "";
                 String countStr = "";
                 int nCount = 0;
@@ -92,19 +80,19 @@ public class EnterTendiesHoldings extends Activity {
                 if(tendiesList.contains(tickerTv.getText().toString())) {
                     count = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", count);
                     nCount = Integer.parseInt(count) + 1;
-                    editor.putString(tickerTv.getText().toString() + "_count_", Integer.toString(nCount)).commit();
+                    editor.putString(tickerTv.getText().toString() + "_count_", Integer.toString(nCount)).apply();
                 } else {
-                    editor.putString(tickerTv.getText().toString() + "_count_", "1").commit();
+                    editor.putString(tickerTv.getText().toString() + "_count_", "1").apply();
                 }
 
                 tendiesList.add(tickerTv.getText().toString());
-                editor.putStringSet("tendiesList", tendiesList).commit();
+                editor.putStringSet("tendiesList", tendiesList).apply();
 
                 countStr = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", countStr);
 
-                editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).commit();
-                editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).commit();
-                editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).commit();
+                editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).apply();
+                editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).apply();
+                editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).apply();
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

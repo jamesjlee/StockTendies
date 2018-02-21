@@ -66,7 +66,10 @@ public class ViewRow extends ListActivity {
 
             note = sharedPreferences.getString(ticker + "_note_count_" + Integer.toString(i), note);
 
-            BigDecimal percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
+            BigDecimal percentChange = new BigDecimal(0.00);
+            if(!marketVal.equals(BigDecimal.ZERO) && !currentMarketVal.equals(BigDecimal.ZERO)) {
+                percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
+            }
 
             viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), tradePrice.toString(), note, percentChange.toString()));
         }
