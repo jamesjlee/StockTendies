@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.net.SocketTimeoutException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,6 +29,7 @@ public class EnterTendiesHoldings extends Activity {
     private TextView holdingsTv;
     private TextView notes;
     private SharedPreferences sharedPreferences;
+    private ProgressBar exceptionSpinner;
 
 
     @Override
@@ -38,6 +43,7 @@ public class EnterTendiesHoldings extends Activity {
         tradePriceEt = (EditText) findViewById(R.id.tradePrice);
         holdingsTv = (TextView) findViewById(R.id.holdings);
         notes = (TextView) findViewById(R.id.notesInput);
+        exceptionSpinner = (ProgressBar) findViewById(R.id.exceptionSpinner);
 
         Intent intentExtras = getIntent();
         Bundle bundle = intentExtras.getExtras();
@@ -67,36 +73,43 @@ public class EnterTendiesHoldings extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save:
-                Set<String> tendiesList = new LinkedHashSet<>();
-                String count = "";
-                String countStr = "";
-                int nCount = 0;
-                SharedPreferences.Editor editor;
-                sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
-                editor = sharedPreferences.edit();
+                try {
+                    exceptionSpinner.setVisibility(View.VISIBLE);
+                    Set<String> tendiesList = new LinkedHashSet<>();
+                    String count = "";
+                    String countStr = "";
+                    int nCount = 0;
+                    SharedPreferences.Editor editor;
+                    sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
 
-                tendiesList = sharedPreferences.getStringSet("tendiesList", tendiesList);
+                    tendiesList = sharedPreferences.getStringSet("tendiesList", tendiesList);
 
-                if(tendiesList.contains(tickerTv.getText().toString())) {
-                    count = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", count);
-                    nCount = Integer.parseInt(count) + 1;
-                    editor.putString(tickerTv.getText().toString() + "_count_", Integer.toString(nCount)).apply();
-                } else {
-                    editor.putString(tickerTv.getText().toString() + "_count_", "1").apply();
+                    if(tendiesList.contains(tickerTv.getText().toString())) {
+                        count = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", count);
+                        nCount = Integer.parseInt(count) + 1;
+                        editor.putString(tickerTv.getText().toString() + "_count_", Integer.toString(nCount)).apply();
+                    } else {
+                        editor.putString(tickerTv.getText().toString() + "_count_", "1").apply();
+                    }
+
+                    tendiesList.add(tickerTv.getText().toString());
+                    editor.putStringSet("tendiesList", tendiesList).apply();
+
+                    countStr = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", countStr);
+
+                    editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).apply();
+                    editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).apply();
+                    editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).apply();
+
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    break;
+                } catch (Exception ex) {
+                    exceptionSpinner.setVisibility(View.GONE);
+                    Toast.makeText(EnterTendiesHoldings.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_LONG).show();
                 }
 
-                tendiesList.add(tickerTv.getText().toString());
-                editor.putStringSet("tendiesList", tendiesList).apply();
-
-                countStr = sharedPreferences.getString(tickerTv.getText().toString() + "_count_", countStr);
-
-                editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).apply();
-                editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).apply();
-                editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).apply();
-
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
             default:
                 break;
         }

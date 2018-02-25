@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,15 +42,29 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
         View rowView = inflater.inflate(R.layout.view_row_tendies, parent, false);
 
-        TextView viewRowTicker = (TextView) rowView.findViewById(R.id.viewRowTicker);
         TextView viewRowHolding = (TextView) rowView.findViewById(R.id.viewRowHolding);
         TextView viewRowPrice = (TextView) rowView.findViewById(R.id.viewRowPrice);
         TextView viewRowNote = (TextView) rowView.findViewById(R.id.viewRowNote);
+        TextView viewRowChange = (TextView) rowView.findViewById(R.id.viewRowChange);
+        TextView viewRowDate = (TextView) rowView.findViewById(R.id.viewRowDate);
 
-        viewRowTicker.setText(viewRowTendiesArrayList.get(position).getTicker());
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+
+        String tradePrice = "";
+        int posPlusOne = position + 1;
+        tradePrice = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_trade_price_count_" + Integer.toString(posPlusOne), tradePrice);
+
+        BigDecimal holdings = new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings());
+        BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), new BigDecimal(tradePrice).multiply(holdings));
+
+
         viewRowHolding.setText(viewRowTendiesArrayList.get(position).getHoldings());
-        viewRowPrice.setText(viewRowTendiesArrayList.get(position).getPrice());
+        viewRowPrice.setText(tradePrice);
+        viewRowChange.setText(change.toString());
         viewRowNote.setText(viewRowTendiesArrayList.get(position).getNotes());
+        viewRowDate.setText(new Date().toString());
+
+        MainActivity.updateChangeTextColor(change, viewRowChange);
 
         return rowView;
     }

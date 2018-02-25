@@ -20,4 +20,7 @@
     <string name="tradePriceLabel">Trade Price</string>
     <string name="holdingsLabel">Holdings</string>
     <string name="saveHoldings">Save</string>
+    <string name="pAndL">P/L</string>
+    <string name="marketVal">Market Value</string>
+    <string name="netCost">Net Cost</string>
 </resources>
