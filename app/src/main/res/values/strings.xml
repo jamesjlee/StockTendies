@@ -16,7 +16,7 @@
     <string name="tenderDayChange">Change</string>
     <string name="sharesText">Ts</string>
     <string name="notesLabel">Notes:</string>
-    <string name="currentPriceLabel">Current Price</string>
+    <string name="currentPriceLabel">Current Price:</string>
     <string name="tradePriceLabel">Trade Price:</string>
     <string name="holdingsLabel">Holdings:</string>
     <string name="saveHoldings">Save</string>

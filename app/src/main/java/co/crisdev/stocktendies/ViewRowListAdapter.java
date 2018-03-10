@@ -52,20 +52,28 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         TextView viewRowChange = (TextView) rowView.findViewById(R.id.viewRowChange);
         TextView viewRowDate = (TextView) rowView.findViewById(R.id.viewRowDate);
         TextView viewRowCost = (TextView) rowView.findViewById(R.id.viewRowCost);
+        TextView viewRowHoldingLbl = (TextView) rowView.findViewById(R.id.viewRowHoldingLabel);
+        TextView viewRowCostLbl = (TextView) rowView.findViewById(R.id.viewRowCostLabel);
+
 
         sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
 
         String tradePrice = "";
         String date = "";
+        String buyOrSell = "";
         int posPlusOne = position + 1;
         tradePrice = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_trade_price_count_" + Integer.toString(posPlusOne), tradePrice);
         date = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_date_count_" + Integer.toString(posPlusOne), date);
+        buyOrSell = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_buy_or_sell_count_" + Integer.toString(posPlusOne), buyOrSell);
 
         BigDecimal holdings = new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings());
         BigDecimal cost = new BigDecimal(tradePrice).multiply(holdings);
         BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), cost);
 
-
+        if(buyOrSell.equals("sell")) {
+            viewRowCostLbl.setText("Proceeds:");
+        }
+        viewRowHoldingLbl.setText(buyOrSell.toUpperCase()+":");
         viewRowHolding.setText(viewRowTendiesArrayList.get(position).getHoldings());
         viewRowPrice.setText("$"+tradePrice);
         viewRowChange.setText(change.toString()+"%");

@@ -80,7 +80,6 @@
         android:id="@+id/viewRowHoldingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/holdingsLabel"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"

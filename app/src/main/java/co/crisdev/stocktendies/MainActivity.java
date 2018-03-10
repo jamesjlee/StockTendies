@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,22 +151,41 @@ public class MainActivity extends ListActivity {
                 for(int i=1; i<=countNum; i++) {
                     String holding = "";
                     String tradePrice = "";
+                    String buyOrSell = "";
                     int holdingNum = 0;
 
                     holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
                     tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
+                    buyOrSell = sharedPreferences.getString(tendie + "_buy_or_sell_count_" + Integer.toString(i), buyOrSell);
 
                     holdingNum = Integer.parseInt(holding);
-                    holdings += holdingNum;
 
                     BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
                     BigDecimal holdingBigDecimal = new BigDecimal(holding);
 
-                    cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
-                    cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
-                    marketVal = marketVal.add(price.multiply(holdingBigDecimal));
+                    if(buyOrSell.equals("buy")) {
+                        holdings += holdingNum;
+                        cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                        cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
+                        marketVal = marketVal.add(price.multiply(holdingBigDecimal));
 
-                    totalDayChangeInDollars = totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
+                        totalDayChangeInDollars = totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
+                    } else if(buyOrSell.equals("sell")){
+                        holdings -= holdingNum;
+                        cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.subtract(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                        cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.subtract(price.multiply(holdingBigDecimal));
+                        marketVal = marketVal.subtract(price.multiply(holdingBigDecimal));
+
+                        totalDayChangeInDollars = totalDayChangeInDollars.subtract(holdingBigDecimal.multiply(changeInDollars)).abs();
+                    }
+                }
+
+                if(marketVal.compareTo(BigDecimal.ZERO) < 0) {
+                    marketVal = BigDecimal.ZERO;
+                }
+
+                if(holdings < 0) {
+                    holdings = 0;
                 }
 
                 Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price.setScale(2, RoundingMode.HALF_UP), change, marketVal.setScale(2, RoundingMode.HALF_UP), symbol, changeInDollars);
@@ -176,18 +196,20 @@ public class MainActivity extends ListActivity {
         }
 
 
-        if(!(cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
+        if((cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) > 0)) {
             BigDecimal y2 = totalDayChangeInDollars.add(cumulativeMarketValAtCurrPrices);
             totalDayPercentChange = percentChange(cumulativeMarketValAtCurrPrices, y2);
             totalDayChange.setText(totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
             updateChangeTextColor(totalDayPercentChange, totalDayChange);
+            totalTendiesValue.setText(cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP).toString());
 
-        } else {
+        } else if((cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) < 0) || (cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
             totalDayChange.setText("0.00");
             updateChangeTextColor(new BigDecimal(0.00), totalDayChange);
+            totalTendiesValue.setText("0.00");
         }
 
-        totalTendiesValue.setText(cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP).toString());
+
 
         Collections.sort(tendiesList, new CustomComparator());
         MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);
@@ -219,8 +241,8 @@ public class MainActivity extends ListActivity {
 
     public class CustomComparator implements Comparator<Tender> {
         @Override
-        public int compare(Tender tender, Tender t1) {
-            return tender.getName().toString().compareTo(t1.getName().toString());
+        public int compare(Tender t1, Tender t2) {
+            return t1.getName().toString().compareTo(t2.getName().toString());
         }
     }
 }

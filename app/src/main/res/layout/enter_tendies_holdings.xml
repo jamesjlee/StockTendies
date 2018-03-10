@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,32 +13,48 @@
         app:layout_constraintGuide_percent="0.00"
         android:orientation="horizontal"/>
 
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline0.5"
+        app:layout_constraintGuide_percent="0.05"
+        android:orientation="horizontal"/>
+
+
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalGuideline1"
-        app:layout_constraintGuide_percent="0.25"
+        app:layout_constraintGuide_percent="0.15"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalGuideline2"
-        app:layout_constraintGuide_percent="0.50"
+        app:layout_constraintGuide_percent="0.25"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalGuideline3"
-        app:layout_constraintGuide_percent="0.75"
+        app:layout_constraintGuide_percent="0.35"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalGuideline4"
-        app:layout_constraintGuide_percent="1.00"
+        app:layout_constraintGuide_percent="0.45"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalGuideline5"
+        app:layout_constraintGuide_percent="0.55"
         android:orientation="horizontal"/>
 
 
@@ -50,7 +65,7 @@
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@id/currentPrice"/>
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline0.5"/>
 
     <TextView
         android:id="@+id/notesLabel"
@@ -59,8 +74,8 @@
         android:text="@string/notesLabel"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="@id/notesInput"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline4"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline5"/>
 
     <TextView
         android:id="@+id/tradePriceLabel"
@@ -69,8 +84,8 @@
         android:text="@string/tradePriceLabel"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="@id/tradePrice"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2" />
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3" />
 
     <TextView
         android:id="@+id/currentPriceLabel"
@@ -79,8 +94,8 @@
         android:text="@string/currentPriceLabel"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="@id/currentPrice"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"/>
 
     <TextView
         android:id="@+id/holdingsLabel"
@@ -89,8 +104,8 @@
         android:text="@string/holdingsLabel"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="@id/holdings"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
 
     <EditText
         android:id="@+id/notesInput"
@@ -100,8 +115,8 @@
         android:inputType="textMultiLine"
         app:layout_constraintLeft_toRightOf="@id/notesLabel"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline4"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline5"/>
 
     <TextView
         android:id="@+id/currentPrice"
@@ -110,8 +125,8 @@
         android:ems="13"
         app:layout_constraintLeft_toRightOf="@id/currentPriceLabel"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"/>
 
     <EditText
         android:id="@+id/tradePrice"
@@ -122,8 +137,8 @@
         android:digits="0123456789."
         app:layout_constraintLeft_toRightOf="@id/tradePriceLabel"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2" />
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3" />
 
     <EditText
         android:id="@+id/holdings"
@@ -134,8 +149,8 @@
         android:digits="0123456789."
         app:layout_constraintLeft_toRightOf="@id/holdingsLabel"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"/>
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"/>
 
     <ProgressBar
         android:id="@+id/exceptionSpinner"
@@ -147,5 +162,29 @@
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="parent"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline0"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="parent">
+
+        <RadioButton
+            android:id="@+id/buyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy" />
+
+        <RadioButton
+            android:id="@+id/sellBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sell" />
+    </RadioGroup>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -7,10 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by lee on 2/18/18.
@@ -38,6 +42,7 @@ public class ViewRow extends ListActivity {
         BigDecimal tradePrice = new BigDecimal(0);
         String note = "";
         String count = "";
+        String buyOrSell = "";
 
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
         viewRowTendiesList = new ArrayList<ViewRowTender>();
@@ -89,14 +94,29 @@ public class ViewRow extends ListActivity {
                 percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
             }
 
-            viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), currPrice.toString(), note, percentChange.toString()));
+            buyOrSell = sharedPreferences.getString(ticker + "_buy_or_sell_count_" + Integer.toString(i), buyOrSell);
+
+            viewRowTendiesList.add(new ViewRowTender(ticker, holding.abs().toString(), currPrice.toString(), note, percentChange.toString(), buyOrSell));
         }
 
         BigDecimal pAndL = totalMarketValue.subtract(netCost);
 
+
+        if(totalHoldings.compareTo(BigDecimal.ZERO) < 0) {
+            totalHoldings = BigDecimal.ZERO;
+        }
+
+        if(totalMarketValue.compareTo(BigDecimal.ZERO) < 0) {
+            totalMarketValue = BigDecimal.ZERO;
+        }
+
+        if(netCost.compareTo(BigDecimal.ZERO) < 0) {
+            netCost = BigDecimal.ZERO;
+        }
+
         vrTendieName.setText(ticker);
         vrHoldings.setText(totalHoldings.toString());
-        vrNetCost.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+netCost.toString());
+        vrNetCost.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+netCost.abs().toString());
         vrPandL.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+pAndL.toString());
         vrMarketValue.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+totalMarketValue.toString());
 
