@@ -115,6 +115,8 @@ public class MainActivity extends ListActivity {
                         .setNegativeButton(android.R.string.no, null).show();
                 break;
             case R.id.about:
+                Intent aboutIntent = new Intent(this, AboutPage.class);
+                startActivity(aboutIntent);
                 break;
             default:
                 break;
@@ -164,17 +166,18 @@ public class MainActivity extends ListActivity {
                     BigDecimal holdingBigDecimal = new BigDecimal(holding);
 
                     if(buyOrSell.equals("buy")) {
+                        System.out.println("here");
                         holdings += holdingNum;
                         cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
                         cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
                         marketVal = marketVal.add(price.multiply(holdingBigDecimal));
-
                         totalDayChangeInDollars = totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                     } else if(buyOrSell.equals("sell")){
-                        holdings -= holdingNum;
+                        System.out.println("there");
+                        holdings += holdingNum;
                         cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.subtract(tradePriceBigDecimal.multiply(holdingBigDecimal));
                         cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.subtract(price.multiply(holdingBigDecimal));
-                        marketVal = marketVal.subtract(price.multiply(holdingBigDecimal));
+                        marketVal = marketVal.add(price.multiply(holdingBigDecimal));
 
                         totalDayChangeInDollars = totalDayChangeInDollars.subtract(holdingBigDecimal.multiply(changeInDollars)).abs();
                     }

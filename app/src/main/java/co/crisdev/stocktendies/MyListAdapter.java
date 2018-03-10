@@ -65,17 +65,17 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
             tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.neutral));
         }
 
+
+        SharedPreferences.Editor editor;
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         tenderDrawable.setImageDrawable(tendersArrayList.get(position).getTenderImage());
         tenderName.setText(tendersArrayList.get(position).getName());
         tenderHoldings.setText(Integer.toString(tendersArrayList.get(position).getHoldings()));
         tenderPrice.setText(tendersArrayList.get(position).getSymbol()+tendersArrayList.get(position).getPrice().toString());
         tenderMarketValue.setText(tendersArrayList.get(position).getSymbol()+tendersArrayList.get(position).getMarketValue().toString());
         tenderDayChange.setText(tendersArrayList.get(position).getDayChangePercent().toString());
-
-
-        SharedPreferences.Editor editor;
-        sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override

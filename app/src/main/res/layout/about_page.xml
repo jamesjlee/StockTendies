@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline0"
+        app:layout_constraintGuide_percent="0.00"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline1"
+        app:layout_constraintGuide_percent="0.10"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline2"
+        app:layout_constraintGuide_percent="0.20"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline3"
+        app:layout_constraintGuide_percent="0.30"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline4"
+        app:layout_constraintGuide_percent="0.40"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline5"
+        app:layout_constraintGuide_percent="0.50"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrHorizontalGuideline6"
+        app:layout_constraintGuide_percent="0.60"
+        android:orientation="horizontal"/>
+
+    <TextView
+        android:id="@+id/createdBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Created by James Lee"
+        app:layout_constraintBottom_toTopOf="@id/vrHorizontalGuideline0"
+        app:layout_constraintTop_toBottomOf="@id/vrHorizontalGuideline1"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email/PayPal: jamesjlee8@gmail.com"
+        app:layout_constraintBottom_toTopOf="@id/vrHorizontalGuideline1"
+        app:layout_constraintTop_toBottomOf="@id/vrHorizontalGuideline2"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:textIsSelectable="true"
+        />
+
+    <TextView
+        android:id="@+id/donosAreAppreciated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Donations are appreciated!"
+        app:layout_constraintBottom_toTopOf="@id/vrHorizontalGuideline3"
+        app:layout_constraintTop_toBottomOf="@id/vrHorizontalGuideline4"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/LTCAddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/vrHorizontalGuideline4"
+        app:layout_constraintTop_toBottomOf="@id/vrHorizontalGuideline5"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:textIsSelectable="true"
+        android:text="LTC: MQizEEuB5hU8K7oVmpeSyCo2tW3FZWURa7" />
+
+    <TextView
+        android:id="@+id/BTCAddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/vrHorizontalGuideline5"
+        app:layout_constraintTop_toBottomOf="@id/vrHorizontalGuideline6"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:textIsSelectable="true"
+        android:text="BTC: 3DTjMiKKThmUNu9FFoyFPsCGoVhB7JGVMy" />
+
+</android.support.constraint.ConstraintLayout>
