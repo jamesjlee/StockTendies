@@ -42,27 +42,36 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
         View rowView = inflater.inflate(R.layout.view_row_tendies, parent, false);
 
+        ViewGroup.LayoutParams params = rowView.getLayoutParams();
+        params.height = 300;
+        rowView.setLayoutParams(params);
+
         TextView viewRowHolding = (TextView) rowView.findViewById(R.id.viewRowHolding);
         TextView viewRowPrice = (TextView) rowView.findViewById(R.id.viewRowPrice);
         TextView viewRowNote = (TextView) rowView.findViewById(R.id.viewRowNote);
         TextView viewRowChange = (TextView) rowView.findViewById(R.id.viewRowChange);
         TextView viewRowDate = (TextView) rowView.findViewById(R.id.viewRowDate);
+        TextView viewRowCost = (TextView) rowView.findViewById(R.id.viewRowCost);
 
         sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
 
         String tradePrice = "";
+        String date = "";
         int posPlusOne = position + 1;
         tradePrice = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_trade_price_count_" + Integer.toString(posPlusOne), tradePrice);
+        date = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_date_count_" + Integer.toString(posPlusOne), date);
 
         BigDecimal holdings = new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings());
-        BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), new BigDecimal(tradePrice).multiply(holdings));
+        BigDecimal cost = new BigDecimal(tradePrice).multiply(holdings);
+        BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), cost);
 
 
         viewRowHolding.setText(viewRowTendiesArrayList.get(position).getHoldings());
-        viewRowPrice.setText(tradePrice);
-        viewRowChange.setText(change.toString());
+        viewRowPrice.setText("$"+tradePrice);
+        viewRowChange.setText(change.toString()+"%");
         viewRowNote.setText(viewRowTendiesArrayList.get(position).getNotes());
-        viewRowDate.setText(new Date().toString());
+        viewRowDate.setText(date);
+        viewRowCost.setText("$"+cost.toString());
 
         MainActivity.updateChangeTextColor(change, viewRowChange);
 

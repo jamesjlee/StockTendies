@@ -15,12 +15,15 @@
     <string name="tendiesPrefs">TendiesPrefsFile</string>
     <string name="tenderDayChange">Change</string>
     <string name="sharesText">Ts</string>
-    <string name="notesLabel">Notes</string>
+    <string name="notesLabel">Notes:</string>
     <string name="currentPriceLabel">Current Price</string>
-    <string name="tradePriceLabel">Trade Price</string>
-    <string name="holdingsLabel">Holdings</string>
+    <string name="tradePriceLabel">Trade Price:</string>
+    <string name="holdingsLabel">Holdings:</string>
     <string name="saveHoldings">Save</string>
     <string name="pAndL">P/L</string>
     <string name="marketVal">Market Value</string>
     <string name="netCost">Net Cost</string>
+    <string name="change">Change:</string>
+    <string name="date">Date:</string>
+    <string name="cost">Cost:</string>
 </resources>

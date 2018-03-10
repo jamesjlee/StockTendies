@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.SocketTimeoutException;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -101,6 +102,7 @@ public class EnterTendiesHoldings extends Activity {
                     editor.putString(tickerTv.getText().toString() + "_holding_count_" + countStr, holdingsTv.getText().toString()).apply();
                     editor.putString(tickerTv.getText().toString() + "_trade_price_count_" + countStr, tradePriceEt.getText().toString()).apply();
                     editor.putString(tickerTv.getText().toString() + "_note_count_" + countStr, notes.getText().toString()).apply();
+                    editor.putString(tickerTv.getText().toString() + "_date_count_" + countStr, new Date().toString()).apply();
 
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);

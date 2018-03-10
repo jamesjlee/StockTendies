@@ -85,20 +85,20 @@ public class ViewRow extends ListActivity {
             note = sharedPreferences.getString(ticker + "_note_count_" + Integer.toString(i), note);
 
             BigDecimal percentChange = new BigDecimal(0.00);
-            if(!marketVal.equals(BigDecimal.ZERO) && !currentMarketVal.equals(BigDecimal.ZERO)) {
+            if((!(marketVal.compareTo(BigDecimal.ZERO) == 0) && (!(currentMarketVal.compareTo(BigDecimal.ZERO) == 0)))) {
                 percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
             }
 
-            viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), tradePrice.toString(), note, percentChange.toString()));
+            viewRowTendiesList.add(new ViewRowTender(ticker, holding.toString(), currPrice.toString(), note, percentChange.toString()));
         }
 
         BigDecimal pAndL = totalMarketValue.subtract(netCost);
 
         vrTendieName.setText(ticker);
         vrHoldings.setText(totalHoldings.toString());
-        vrNetCost.setText(netCost.toString());
-        vrPandL.setText(pAndL.toString());
-        vrMarketValue.setText(totalMarketValue.toString());
+        vrNetCost.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+netCost.toString());
+        vrPandL.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+pAndL.toString());
+        vrMarketValue.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+totalMarketValue.toString());
 
         MainActivity.updateChangeTextColor(pAndL, vrPandL);
 

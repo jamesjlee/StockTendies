@@ -104,6 +104,9 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                 ArrayList<Tender> tendiesList = new ArrayList<Tender>();
                                 tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
                                 String count = "";
+                                MainActivity.cumulativeMarketValAtTradePrices = new BigDecimal(0.00);
+                                MainActivity.cumulativeMarketValAtCurrPrices = new BigDecimal(0.00);
+
 
                                 for(String tendie : tendiesSet) {
                                     try {
@@ -117,31 +120,34 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
 
                                         int countNum = Integer.parseInt(count);
                                         for(int i=1; i<=countNum; i++) {
-                                            if(!tendie.equals(tenderName.getText())) {
+                                            if(tendie.equals(tenderName.getText())) {
                                                 editor.remove(tendie + "_holding_count_" + Integer.toString(i)).apply();
                                                 editor.remove(tendie + "_trade_price_count_" + Integer.toString(i)).apply();
                                                 editor.remove(tendie + "_note_count_" + Integer.toString(i)).apply();
-
-                                            } else {
-                                                String holding = "";
-                                                String tradePrice = "";
-                                                int holdingNum = 0;
-
-                                                holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
-                                                tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
-
-                                                holdingNum = Integer.parseInt(holding);
-                                                holdings += holdingNum;
-
-                                                BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
-                                                BigDecimal holdingBigDecimal = new BigDecimal(holding);
-
-                                                MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
-                                                MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
-                                                marketVal = marketVal.add(price.multiply(holdingBigDecimal));
-
-                                                MainActivity.totalDayChangeInDollars = MainActivity.totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
+                                                editor.remove(tendie + "_date_count_" + Integer.toString(i)).apply();
                                             }
+                                            String holding = "";
+                                            String tradePrice = "";
+                                            int holdingNum = 0;
+
+                                            holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
+                                            tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
+
+                                            if(holding.isEmpty() && tradePrice.isEmpty()) {
+                                                holding = "0";
+                                                tradePrice = "0.00";
+                                            }
+                                            holdingNum = Integer.parseInt(holding);
+                                            holdings += holdingNum;
+
+                                            BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
+                                            BigDecimal holdingBigDecimal = new BigDecimal(holding);
+
+                                            MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                                            MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
+                                            marketVal = marketVal.add(price.multiply(holdingBigDecimal));
+
+                                            MainActivity.totalDayChangeInDollars = MainActivity.totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -149,18 +155,19 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                 }
 
 
-                                if(!MainActivity.cumulativeMarketValAtCurrPrices.equals(BigDecimal.ZERO)) {
+                                System.out.println(MainActivity.cumulativeMarketValAtTradePrices.toString());
+                                if(!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
                                     BigDecimal y2 = MainActivity.totalDayChangeInDollars.add(MainActivity.cumulativeMarketValAtCurrPrices);
                                     MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, y2);
                                     MainActivity.totalDayChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                                    MainActivity.totalTendiesValue.setText(MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP).toString());
                                     updatePercentChangeColor(MainActivity.totalDayPercentChange);
-
                                 } else {
                                     MainActivity.totalDayChange.setText("0.00");
+                                    MainActivity.totalTendiesValue.setText("0.00");
                                     updatePercentChangeColor(new BigDecimal(0.00));
                                 }
 
-                                MainActivity.totalTendiesValue.setText(MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP).toString());
 
                                 tendiesSet.remove(tenderName.getText());
                                 editor.putStringSet("tendiesList", tendiesSet).apply();
@@ -193,7 +200,7 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
             MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive));
         } else if (percentChange.compareTo(BigDecimal.ZERO) < 0) {
             MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative));
-        } else if (percentChange.equals(BigDecimal.ZERO)){
+        } else if (percentChange.compareTo(BigDecimal.ZERO) == 0){
             MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.neutral));
         }
     }

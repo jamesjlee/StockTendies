@@ -176,7 +176,7 @@ public class MainActivity extends ListActivity {
         }
 
 
-        if(!cumulativeMarketValAtCurrPrices.equals(BigDecimal.ZERO)) {
+        if(!(cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
             BigDecimal y2 = totalDayChangeInDollars.add(cumulativeMarketValAtCurrPrices);
             totalDayPercentChange = percentChange(cumulativeMarketValAtCurrPrices, y2);
             totalDayChange.setText(totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
@@ -212,7 +212,7 @@ public class MainActivity extends ListActivity {
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.positive));
         } else if (percentChange.compareTo(BigDecimal.ZERO) < 0) {
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.negative));
-        } else if (percentChange.equals(BigDecimal.ZERO)){
+        } else if (percentChange.compareTo(BigDecimal.ZERO) == 0){
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
         }
     }

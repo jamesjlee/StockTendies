@@ -94,7 +94,7 @@
         android:id="@+id/vrHoldingsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/holdingsLabel"
+        android:text="@string/tenderHoldings"
         app:layout_constraintTop_toBottomOf="@+id/vrHoldings"
         app:layout_constraintBottom_toTopOf="@+id/vrHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline0"
@@ -160,8 +160,8 @@
 
     <ListView
         android:id="@android:id/list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="1000dp"
         app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline3"/>
 
 
