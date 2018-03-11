@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
@@ -51,6 +52,11 @@ public class MainActivity extends ListActivity {
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100.00);
     private static Context context;
 
+    static  {
+        // Creates a single static instance of PhotoManager
+        MainActivity mInstance = new MainActivity();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,16 +69,25 @@ public class MainActivity extends ListActivity {
         totalDayChange = (TextView) findViewById(R.id.tendiesPercentDayChangeVal);
         totalTendiesValue = (TextView) findViewById(R.id.mainTendiesValue);
         MainActivity.context = getApplicationContext();
+        totalDayPercentChange = BigDecimal.ZERO;
 
-        loadSwipeRefreshLayout();
+        new loadingTask().doInBackground();
 
         tendiesRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadSwipeRefreshLayout();
+                new loadingTask().doInBackground();
                 Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout on refresh listener");
             }
         });
+    }
+
+    private class loadingTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            loadSwipeRefreshLayout();
+            return null;
+        }
     }
 
     public static Context getAppContext() {
@@ -82,7 +97,7 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadSwipeRefreshLayout();
+        new loadingTask().doInBackground();
         Log.i("onResume", "onRefresh called from SwipeRefreshLayout on onResume");
     }
 
@@ -110,7 +125,7 @@ public class MainActivity extends ListActivity {
                                 sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
                                 sharedPreferences.edit().clear().apply();
                                 updateChangeTextColor(totalDayPercentChange, totalDayChange);
-                                loadSwipeRefreshLayout();
+                                new loadingTask().doInBackground();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
                 break;
@@ -166,14 +181,12 @@ public class MainActivity extends ListActivity {
                     BigDecimal holdingBigDecimal = new BigDecimal(holding);
 
                     if(buyOrSell.equals("buy")) {
-                        System.out.println("here");
                         holdings += holdingNum;
                         cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
                         cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
                         marketVal = marketVal.add(price.multiply(holdingBigDecimal));
                         totalDayChangeInDollars = totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                     } else if(buyOrSell.equals("sell")){
-                        System.out.println("there");
                         holdings += holdingNum;
                         cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.subtract(tradePriceBigDecimal.multiply(holdingBigDecimal));
                         cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.subtract(price.multiply(holdingBigDecimal));
@@ -211,8 +224,6 @@ public class MainActivity extends ListActivity {
             updateChangeTextColor(new BigDecimal(0.00), totalDayChange);
             totalTendiesValue.setText("0.00");
         }
-
-
 
         Collections.sort(tendiesList, new CustomComparator());
         MyListAdapter listAdapter = new MyListAdapter(this, tendiesList);

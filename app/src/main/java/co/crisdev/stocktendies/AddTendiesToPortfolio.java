@@ -1,22 +1,17 @@
 package co.crisdev.stocktendies;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
@@ -46,21 +41,15 @@ public class AddTendiesToPortfolio extends Activity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 boolean isTender = false;
-                try {
-                    spinner.setVisibility(View.VISIBLE);
-                    Stock stock = YahooFinance.get(s);
-                    if(stock.getQuote().getPrice() != null) {
-                        isTender = true;
-                        spinner.setVisibility(View.GONE);
-                        switchView(s, symbol, stock.getQuote().getPrice());
-                    } else {
-                        Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
-                        spinner.setVisibility(View.GONE);
-                    }
-                } catch (IOException e) {
+                spinner.setVisibility(View.VISIBLE);
+                Stock stock = new loadingTask().doInBackground(s);
+                if(stock.getQuote().getPrice() != null) {
+                    isTender = true;
                     spinner.setVisibility(View.GONE);
-                    Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                    switchView(s, symbol, stock.getQuote().getPrice());
+                } else {
+                    Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
+                    spinner.setVisibility(View.GONE);
                 }
                 return isTender;
             }
@@ -79,5 +68,24 @@ public class AddTendiesToPortfolio extends Activity {
         bundle.putString("price", symbol+price.toString());
         intentBundle.putExtras(bundle);
         startActivity(intentBundle);
+    }
+
+    private class loadingTask extends AsyncTask<String, String, Stock> {
+        @Override
+        protected Stock doInBackground(String... strings) {
+            Stock stock = queryStock(strings[0]);
+            return stock;
+        }
+    }
+
+    public Stock queryStock(String s) {
+        Stock stock = null;
+        try {
+            stock = YahooFinance.get(s);
+        } catch (IOException e) {
+            spinner.setVisibility(View.GONE);
+            Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_LONG).show();
+        }
+        return stock;
     }
 }
