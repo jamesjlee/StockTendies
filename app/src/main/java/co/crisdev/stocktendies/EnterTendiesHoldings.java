@@ -11,12 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.SocketTimeoutException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -62,8 +62,8 @@ public class EnterTendiesHoldings extends Activity {
                 String currPrice = bundle.getString("price");
 
                 tickerTv.setText(ticker.toUpperCase());
-                currPriceTv.setText(currPrice);
-                tradePriceEt.setText(currPrice.substring(1, currPrice.length()));
+                currPriceTv.setText(String.format("$%,.2f", new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.HALF_UP)));
+                tradePriceEt.setText(new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.HALF_UP).toString());
                 radioGroup.check(R.id.buyBtn);
             }
         }

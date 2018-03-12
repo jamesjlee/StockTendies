@@ -43,7 +43,7 @@ public class AddTendiesToPortfolio extends Activity {
                 boolean isTender = false;
                 spinner.setVisibility(View.VISIBLE);
                 Stock stock = new loadingTask().doInBackground(s);
-                if(stock.getQuote().getPrice() != null) {
+                if(stock != null && stock.getQuote() != null && stock.getQuote().getPrice() != null) {
                     isTender = true;
                     spinner.setVisibility(View.GONE);
                     switchView(s, symbol, stock.getQuote().getPrice());
@@ -83,8 +83,7 @@ public class AddTendiesToPortfolio extends Activity {
         try {
             stock = YahooFinance.get(s);
         } catch (IOException e) {
-            spinner.setVisibility(View.GONE);
-            Toast.makeText(AddTendiesToPortfolio.this, "Could not find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
         return stock;
     }

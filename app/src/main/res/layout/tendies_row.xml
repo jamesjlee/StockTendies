@@ -74,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/tenderHoldingsText"
         app:layout_constraintStart_toEndOf="@+id/rGuideline1"
         app:layout_constraintEnd_toEndOf="@+id/rGuideline2"
@@ -86,6 +87,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:text="@string/sharesText"
+        android:textColor="#FFFFFF"
         app:layout_constraintLeft_toRightOf="@+id/rowTenderHoldings"
         app:layout_constraintTop_toBottomOf="@+id/tenderHoldingsText">
     </TextView>
@@ -95,6 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/rowTenderHoldings"
         app:layout_constraintStart_toEndOf="@+id/rGuideline1"
         app:layout_constraintEnd_toEndOf="@+id/rGuideline2">
@@ -106,6 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/tenderDayChange"
         app:layout_constraintStart_toEndOf="@+id/rGuideline2"
         app:layout_constraintEnd_toEndOf="@+id/rGuideline3"
@@ -118,6 +122,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:text="@string/tendiesPercentSymbol"
+        android:textColor="#FFFFFF"
         app:layout_constraintLeft_toRightOf="@+id/rowTenderDayChange"
         app:layout_constraintTop_toBottomOf="@+id/tenderDayChange">
     </TextView>
@@ -129,6 +134,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:text="0.00"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
         app:layout_constraintStart_toEndOf="@+id/rGuideline3"
         app:layout_constraintEnd_toEndOf="@+id/rGuideline4">
@@ -136,8 +142,8 @@
 
     <ImageView
         android:id="@+id/rowTenderDrop"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@android:drawable/ic_menu_delete"
         app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
         app:layout_constraintLeft_toRightOf="@+id/rGuideline5"/>

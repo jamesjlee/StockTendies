@@ -3,7 +3,6 @@ package co.crisdev.stocktendies;
 import android.graphics.drawable.Drawable;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 /**
  * Created by lee on 1/28/18.
@@ -12,7 +11,7 @@ import java.util.Collections;
 public class Tender {
     private Drawable tenderImage;
     private String name;
-    private int holdings;
+    private BigDecimal holdings;
     private BigDecimal price;
     private Drawable tenderImageFooter;
     private BigDecimal marketValue;
@@ -20,7 +19,7 @@ public class Tender {
     private String symbol;
     private BigDecimal changeInDollars;
 
-    public Tender(Drawable tenderImage, String name, int holdings, BigDecimal price, BigDecimal dayChangePercent, BigDecimal marketValue, String symbol, BigDecimal changeInDollars) {
+    public Tender(Drawable tenderImage, String name, BigDecimal holdings, BigDecimal price, BigDecimal dayChangePercent, BigDecimal marketValue, String symbol, BigDecimal changeInDollars) {
         super();
         this.tenderImage = tenderImage;
         this.name = name;
@@ -56,11 +55,11 @@ public class Tender {
         this.name = name;
     }
 
-    public int getHoldings() {
+    public BigDecimal getHoldings() {
         return holdings;
     }
 
-    public void setHoldings(int holdings) {
+    public void setHoldings(BigDecimal holdings) {
         this.holdings = holdings;
     }
 

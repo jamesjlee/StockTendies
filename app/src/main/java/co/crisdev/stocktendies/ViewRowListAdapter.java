@@ -1,24 +1,16 @@
 package co.crisdev.stocktendies;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by lee on 2/19/18.
@@ -43,7 +35,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         View rowView = inflater.inflate(R.layout.view_row_tendies, parent, false);
 
         ViewGroup.LayoutParams params = rowView.getLayoutParams();
-        params.height = 300;
+        params.height = 350;
         rowView.setLayoutParams(params);
 
         TextView viewRowHolding = (TextView) rowView.findViewById(R.id.viewRowHolding);
@@ -54,6 +46,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         TextView viewRowCost = (TextView) rowView.findViewById(R.id.viewRowCost);
         TextView viewRowHoldingLbl = (TextView) rowView.findViewById(R.id.viewRowHoldingLabel);
         TextView viewRowCostLbl = (TextView) rowView.findViewById(R.id.viewRowCostLabel);
+        TextView viewRowChangeLbl = (TextView) rowView.findViewById(R.id.viewRowChangeLabel);
 
 
         sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
@@ -72,16 +65,19 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
         if(buyOrSell.equals("sell")) {
             viewRowCostLbl.setText("Proceeds:");
+            viewRowChange.setVisibility(View.GONE);
+            viewRowChangeLbl.setVisibility(View.GONE);
+        } else if(buyOrSell.equals("buy")) {
+            viewRowChange.setText(String.format("%,.2f", change));
         }
         viewRowHoldingLbl.setText(buyOrSell.toUpperCase()+":");
-        viewRowHolding.setText(viewRowTendiesArrayList.get(position).getHoldings());
-        viewRowPrice.setText("$"+tradePrice);
-        viewRowChange.setText(change.toString()+"%");
+        viewRowHolding.setText(String.format("%,.0f", new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings())));
+        viewRowPrice.setText(String.format("$%,.2f", new BigDecimal(tradePrice).setScale(2, RoundingMode.HALF_UP)));
         viewRowNote.setText(viewRowTendiesArrayList.get(position).getNotes());
         viewRowDate.setText(date);
-        viewRowCost.setText("$"+cost.toString());
+        viewRowCost.setText(String.format("$%,.2f", cost.setScale(2, RoundingMode.HALF_UP)));
 
-        MainActivity.updateChangeTextColor(change, viewRowChange);
+        MainActivity.updateChangeTextColorNoSymbol(change, viewRowChange);
 
         return rowView;
     }

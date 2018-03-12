@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -55,8 +57,11 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         TextView tenderDayChange = (TextView) rowView.findViewById(R.id.rowTenderDayChange);
         TextView tenderHoldings = (TextView) rowView.findViewById(R.id.rowTenderHoldings);
         ImageView tenderDrop = (ImageView) rowView.findViewById(R.id.rowTenderDrop);
+        TextView tenderPercentSymbol = (TextView) rowView.findViewById(R.id.rowTenderPercent);
 
         // add color to percent change
+        MainActivity.updateChangeTextColor(tendersArrayList.get(position).getDayChangePercent(), tenderDayChange, tenderPercentSymbol);
+
         if(tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) > 0) {
             tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.positive));
         } else if (tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) < 0){
@@ -72,10 +77,10 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
 
         tenderDrawable.setImageDrawable(tendersArrayList.get(position).getTenderImage());
         tenderName.setText(tendersArrayList.get(position).getName());
-        tenderHoldings.setText(Integer.toString(tendersArrayList.get(position).getHoldings()));
-        tenderPrice.setText(tendersArrayList.get(position).getSymbol()+tendersArrayList.get(position).getPrice().toString());
-        tenderMarketValue.setText(tendersArrayList.get(position).getSymbol()+tendersArrayList.get(position).getMarketValue().toString());
-        tenderDayChange.setText(tendersArrayList.get(position).getDayChangePercent().toString());
+        tenderHoldings.setText(String.format("%,.0f", tendersArrayList.get(position).getHoldings()));
+        tenderPrice.setText(String.format("$%,.2f", tendersArrayList.get(position).getPrice()));
+        tenderMarketValue.setText(String.format("$%,.2f", tendersArrayList.get(position).getMarketValue()));
+        tenderDayChange.setText(String.format("%,.2f", tendersArrayList.get(position).getDayChangePercent()));
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,25 +153,23 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                             MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
                                             marketVal = marketVal.add(price.multiply(holdingBigDecimal));
 
-                                            MainActivity.totalDayChangeInDollars = MainActivity.totalDayChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
+                                            MainActivity.totalTendiesChangeInDollars = MainActivity.totalTendiesChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
 
-
-                                System.out.println(MainActivity.cumulativeMarketValAtTradePrices.toString());
                                 if(!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
-                                    BigDecimal y2 = MainActivity.totalDayChangeInDollars.add(MainActivity.cumulativeMarketValAtCurrPrices);
+                                    BigDecimal y2 = MainActivity.totalTendiesChangeInDollars.add(MainActivity.cumulativeMarketValAtCurrPrices);
                                     MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, y2);
-                                    MainActivity.totalDayChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
-                                    MainActivity.totalTendiesValue.setText(MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP).toString());
+                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
                                     updatePercentChangeColor(MainActivity.totalDayPercentChange);
                                 } else {
-                                    MainActivity.totalDayChange.setText("0.00");
-                                    MainActivity.totalTendiesValue.setText("0.00");
-                                    updatePercentChangeColor(new BigDecimal(0.00));
+                                    MainActivity.totalTendiesChange.setText("0.00%");
+                                    MainActivity.totalTendiesValue.setText("$0.00");
+                                    updatePercentChangeColor(BigDecimal.ZERO);
                                 }
 
 
@@ -198,11 +201,11 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
 
     public void updatePercentChangeColor(BigDecimal percentChange) {
         if(percentChange.compareTo(BigDecimal.ZERO) > 0) {
-            MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive));
+            MainActivity.totalTendiesChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive));
         } else if (percentChange.compareTo(BigDecimal.ZERO) < 0) {
-            MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative));
+            MainActivity.totalTendiesChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative));
         } else if (percentChange.compareTo(BigDecimal.ZERO) == 0){
-            MainActivity.totalDayChange.setTextColor(ContextCompat.getColor(getContext(), R.color.neutral));
+            MainActivity.totalTendiesChange.setTextColor(ContextCompat.getColor(getContext(), R.color.neutral));
         }
     }
 }

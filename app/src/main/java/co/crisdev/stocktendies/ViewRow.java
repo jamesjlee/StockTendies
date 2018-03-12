@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 
 /**
  * Created by lee on 2/18/18.
@@ -115,12 +111,12 @@ public class ViewRow extends ListActivity {
         }
 
         vrTendieName.setText(ticker);
-        vrHoldings.setText(totalHoldings.toString());
-        vrNetCost.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+netCost.abs().toString());
-        vrPandL.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+pAndL.toString());
-        vrMarketValue.setText(getApplicationContext().getApplicationContext().getResources().getString(R.string.dollarSign)+totalMarketValue.toString());
+        vrHoldings.setText(String.format("%,.0f", totalHoldings));
+        vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.HALF_UP).abs()));
+        vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.HALF_UP)));
+        vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.HALF_UP)));
 
-        MainActivity.updateChangeTextColor(pAndL, vrPandL);
+        MainActivity.updateChangeTextColorNoSymbol(pAndL, vrPandL);
 
         ViewRowListAdapter listAdapter = new ViewRowListAdapter(this, viewRowTendiesList);
         setListAdapter(listAdapter);

@@ -125,8 +125,9 @@
 
     <TextView
         android:id="@+id/viewRowHolding"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
@@ -134,8 +135,9 @@
 
     <TextView
         android:id="@+id/viewRowPrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline3"
@@ -143,8 +145,9 @@
 
     <TextView
         android:id="@+id/viewRowChange"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
@@ -152,8 +155,11 @@
 
     <TextView
         android:id="@+id/viewRowNote"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:maxLength="75"
+        app:layout_constraintWidth_default="wrap"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline3"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
@@ -171,8 +177,9 @@
 
     <TextView
         android:id="@+id/viewRowCost"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline3"
@@ -190,12 +197,23 @@
 
     <TextView
         android:id="@+id/viewRowDate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline2"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline3"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
+
+    <ImageView
+        android:id="@+id/viewRowDelete"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:src="@android:drawable/ic_menu_delete"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline4"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
 
 </android.support.constraint.ConstraintLayout>

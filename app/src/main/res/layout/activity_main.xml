@@ -55,53 +55,37 @@
         android:id="@+id/tendiesPercentDayChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/totalTendiesPercentDayChange"
+        android:text="@string/totalTendiesPercentChange"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/mainTendiesTitle"
         app:layout_constraintLeft_toRightOf="@+id/guideline2"
         app:layout_constraintRight_toLeftOf="@+id/guideline4"/>
 
     <TextView
-        android:id="@+id/dollarSign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dollarSign"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintBottom_toTopOf="@+id/tenderName"
-        app:layout_constraintRight_toLeftOf="@+id/guideline1"
-        app:layout_constraintLeft_toRightOf="@+id/guideline0"/>
-
-    <TextView
         android:id="@+id/mainTendiesValue"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/tenderName"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesTitle"
-        app:layout_constraintLeft_toRightOf="@+id/dollarSign" />
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintLeft_toRightOf="@+id/guideline0" />
 
     <TextView
         android:id="@+id/tendiesPercentDayChangeVal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:text="0.00"
-        app:layout_constraintBottom_toBottomOf="@+id/mainTendiesValue"
-        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue"
-        app:layout_constraintLeft_toRightOf="@+id/guideline2"
-        app:layout_constraintRight_toLeftOf="@+id/guideline4" />
-
-    <TextView
-        android:id="@+id/tendiesPercentSymbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tendiesPercentSymbol"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/mainTendiesValue"
-        app:layout_constraintTop_toTopOf="@+id/mainTendiesValue"
-        app:layout_constraintLeft_toRightOf="@+id/tendiesPercentDayChangeVal" />
+        app:layout_constraintBottom_toTopOf="@+id/tenderDayChange"
+        app:layout_constraintTop_toBottomOf="@+id/tendiesPercentDayChange"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintLeft_toRightOf="@+id/guideline2" />
 
     <TextView
         android:id="@+id/tenderName"
@@ -109,8 +93,8 @@
         android:layout_height="wrap_content"
         android:text="@string/tendieName"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/guideline0"
-        app:layout_constraintEnd_toEndOf="@+id/guideline1"
+        app:layout_constraintLeft_toRightOf="@+id/guideline0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline1"
         app:layout_constraintBottom_toTopOf="@+id/refreshTendies"
         app:layout_constraintTop_toBottomOf="@+id/mainTendiesValue">
 
@@ -122,8 +106,8 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/tenderHoldings"
-        app:layout_constraintStart_toEndOf="@+id/guideline1"
-        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+        app:layout_constraintLeft_toRightOf="@+id/guideline1"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tenderName"
         app:layout_constraintBottom_toTopOf="@+id/tenderName">
     </TextView>
@@ -134,8 +118,8 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/tenderDayChange"
-        app:layout_constraintStart_toEndOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="@+id/guideline3"
+        app:layout_constraintLeft_toRightOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tenderName"
         app:layout_constraintBottom_toTopOf="@+id/tenderName">
     </TextView>
@@ -146,22 +130,20 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/tenderPrices"
-        app:layout_constraintStart_toEndOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/tenderName"
-        app:layout_constraintBottom_toTopOf="@+id/tenderName">
+        app:layout_constraintLeft_toRightOf="@+id/guideline3"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/tenderDayChange"
+        app:layout_constraintBottom_toTopOf="@+id/tenderDayChange">
     </TextView>
-
-
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refreshTendies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tenderName">
 
         <ListView
@@ -170,8 +152,5 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@+id/refreshTendies">
         </ListView>
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 </android.support.constraint.ConstraintLayout>
