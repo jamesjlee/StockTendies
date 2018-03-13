@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeViewRow"
         android:enabled="true"
         android:icon="@drawable/ic_menu_home"
         android:title="@string/home"
@@ -11,10 +11,10 @@
         android:showAsAction="always" />
 
     <item
-        android:id="@+id/save"
+        android:id="@+id/addOnViewRow"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_save"
-        android:title="@string/saveHoldings"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/addTendies"
         android:visible="true"
         android:showAsAction="always" />
 </menu>

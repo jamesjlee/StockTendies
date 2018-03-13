@@ -1,12 +1,17 @@
 package co.crisdev.stocktendies;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,6 +28,8 @@ public class ViewRow extends ListActivity {
     public static TextView vrPandL;
     public static TextView vrNetCost;
     public static TextView vrHoldings;
+    public String ticker = "";
+    public String price = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +42,10 @@ public class ViewRow extends ListActivity {
         vrNetCost = (TextView) findViewById(R.id.vrNetCost);
         vrHoldings = (TextView) findViewById(R.id.vrHoldings);
 
-        String ticker = "";
-        String price = "";
 
-        BigDecimal holding = new BigDecimal(0);
-        BigDecimal tradePrice = new BigDecimal(0);
+
+        BigDecimal holding = BigDecimal.ZERO;
+        BigDecimal tradePrice = BigDecimal.ZERO;
         String note = "";
         String count = "";
         String buyOrSell = "";
@@ -124,5 +130,33 @@ public class ViewRow extends ListActivity {
 
         ViewRowListAdapter listAdapter = new ViewRowListAdapter(this, viewRowTendiesList);
         setListAdapter(listAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_on_view_row, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeViewRow:
+                Intent intent = new Intent(ViewRow.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.addOnViewRow:
+                Intent intentBundle = new Intent(ViewRow.this, EnterTendiesHoldings.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("ticker", ticker);
+                bundle.putString("price", price.toString());
+                bundle.putString("from", "viewRow");
+                intentBundle.putExtras(bundle);
+                startActivity(intentBundle);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

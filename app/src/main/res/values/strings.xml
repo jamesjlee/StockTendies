@@ -10,6 +10,7 @@
     <string name="tendiesPercentPlusSymbol">+</string>
     <string name="tendiesPercentMinusSymbol">-</string>
     <string name="addTendies">Add</string>
+    <string name="home">Home</string>
     <string name="resetTendies">Reset</string>
     <string name="aboutTendies">About </string>
     <string name="tendiesPrefs">TendiesPrefsFile</string>

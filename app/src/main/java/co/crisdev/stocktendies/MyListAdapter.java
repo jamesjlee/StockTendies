@@ -190,7 +190,6 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         Bundle bundle = new Bundle();
         bundle.putString("ticker", ticker);
         bundle.putString("price", price);
-        bundle.putString("changeInDollars", changeInDollars);
         intentBundle.putExtras(bundle);
         view.getContext().startActivity(intentBundle);
     }

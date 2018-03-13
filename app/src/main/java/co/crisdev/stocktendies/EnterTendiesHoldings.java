@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.method.DigitsKeyListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,9 @@ public class EnterTendiesHoldings extends Activity {
     private SharedPreferences sharedPreferences;
     private ProgressBar exceptionSpinner;
     private RadioGroup radioGroup;
+    private String from;
+    private String ticker;
+    private String currPrice;
 
 
     @Override
@@ -50,16 +54,22 @@ public class EnterTendiesHoldings extends Activity {
         exceptionSpinner = (ProgressBar) findViewById(R.id.exceptionSpinner);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
+        currPriceTv.setKeyListener(DigitsKeyListener.getInstance(true,true));
+        tradePriceEt.setKeyListener(DigitsKeyListener.getInstance(true,true));
+
+
         Intent intentExtras = getIntent();
         Bundle bundle = intentExtras.getExtras();
 
         if(!bundle.isEmpty()) {
             boolean hasTicker = bundle.containsKey("ticker");
             boolean hasPrice = bundle.containsKey("price");
+            boolean hasFrom = bundle.containsKey("from");
 
-            if(hasTicker && hasPrice) {
-                String ticker = bundle.getString("ticker");
-                String currPrice = bundle.getString("price");
+            if(hasTicker && hasPrice && hasFrom) {
+                ticker = bundle.getString("ticker");
+                currPrice = bundle.getString("price");
+                from = bundle.getString("from");
 
                 tickerTv.setText(ticker.toUpperCase());
                 currPriceTv.setText(String.format("$%,.2f", new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.HALF_UP)));
@@ -78,6 +88,10 @@ public class EnterTendiesHoldings extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.home:
+                Intent intentHome = new Intent(this, MainActivity.class);
+                startActivity(intentHome);
+                break;
             case R.id.save:
                 try {
                     if(tradePriceEt.getText().toString().isEmpty()) {
@@ -128,12 +142,24 @@ public class EnterTendiesHoldings extends Activity {
                         editor.putString(tickerTv.getText().toString() + "_date_count_" + countStr, now.toString()).apply();
                         editor.putString(tickerTv.getText().toString() + "_buy_or_sell_count_" + countStr, buy_or_sell).apply();
 
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
-                        exceptionSpinner.setVisibility(View.GONE);
-                        break;
+                        if(from.equals("viewRow")) {
+                            Intent intentBundle = new Intent(this, ViewRow.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ticker", ticker);
+                            bundle.putString("price", currPrice);
+                            intentBundle.putExtras(bundle);
+                            startActivity(intentBundle);
+                            exceptionSpinner.setVisibility(View.GONE);
+                            break;
+                        } else if(from.equals("addTendies")){
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
+                            exceptionSpinner.setVisibility(View.GONE);
+                            break;
+                        }
                     }
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     exceptionSpinner.setVisibility(View.GONE);
                     Toast.makeText(EnterTendiesHoldings.this, "Could not save your precious tendie. Please try again.", Toast.LENGTH_LONG).show();
                 }

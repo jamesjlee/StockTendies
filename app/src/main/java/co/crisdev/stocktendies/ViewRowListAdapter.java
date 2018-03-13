@@ -66,6 +66,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         String date = "";
         String buyOrSell = "";
         int posPlusOne = position + 1;
+
         tradePrice = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_trade_price_count_" + Integer.toString(posPlusOne), tradePrice);
         date = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_date_count_" + Integer.toString(posPlusOne), date);
         buyOrSell = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_buy_or_sell_count_" + Integer.toString(posPlusOne), buyOrSell);
@@ -135,6 +136,35 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
                                                 editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(i)).apply();
                                                 int nCount = countNum - 1;
                                                 editor.putString(tendie + "_count_", Integer.toString(nCount)).apply();
+
+                                                if(positionPlusOne != countNum) {
+                                                    for(int k=positionPlusOne; k<countNum;k++) {
+                                                        String holding = "";
+                                                        String tradePrice = "";
+                                                        String note = "";
+                                                        String date = "";
+                                                        String buyOrSell = "";
+                                                        holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(k+1), holding);
+                                                        tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(k+1), holding);
+                                                        note = sharedPreferences.getString(tendie + "_note_count_" + Integer.toString(k+1), holding);
+                                                        date = sharedPreferences.getString(tendie + "_date_count_" + Integer.toString(k+1), holding);
+                                                        buyOrSell = sharedPreferences.getString(tendie + "_buy_or_sell_count_" + Integer.toString(k+1), holding);
+
+                                                        //remove trailing tendie
+                                                        editor.remove(tendie + "_holding_count_" + Integer.toString(k)).apply();
+                                                        editor.remove(tendie + "_trade_price_count_" + Integer.toString(k)).apply();
+                                                        editor.remove(tendie + "_note_count_" + Integer.toString(k)).apply();
+                                                        editor.remove(tendie + "_date_count_" + Integer.toString(k)).apply();
+                                                        editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(k)).apply();
+
+                                                        //add tendie with new index
+                                                        editor.putString(tendie + "_holding_count_" + Integer.toString(k), holding).apply();
+                                                        editor.putString(tendie + "_trade_price_count_" + Integer.toString(k), tradePrice).apply();
+                                                        editor.putString(tendie + "_note_count_" + Integer.toString(k), note).apply();
+                                                        editor.putString(tendie + "_date_count_" + Integer.toString(k), date).apply();
+                                                        editor.putString(tendie + "_buy_or_sell_count_" + Integer.toString(k), buyOrSell).apply();
+                                                    }
+                                                }
                                             } else {
                                                 String holding = "";
                                                 String tradePrice = "";

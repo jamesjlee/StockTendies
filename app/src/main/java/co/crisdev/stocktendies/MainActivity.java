@@ -40,7 +40,6 @@ public class MainActivity extends ListActivity {
     public static BigDecimal cumulativeMarketValAtCurrPrices;
     public static  BigDecimal totalDayPercentChange;
     public static BigDecimal totalTendiesChangeInDollars;
-    public static final String symbol = "$";
     public static String todayDate;
     public static String yesterdayDate;
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100.00);
@@ -177,7 +176,7 @@ public class MainActivity extends ListActivity {
                     marketVal = marketVal.add(price.multiply(holdingBigDecimal));
                 }
 
-                Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price.setScale(2, RoundingMode.HALF_UP), change, marketVal.setScale(2, RoundingMode.HALF_UP), symbol, changeInDollars);
+                Tender tender = new Tender(getResources().getDrawable(R.mipmap.ic_launcher, null), tendie.toUpperCase(), holdings, price.setScale(2, RoundingMode.HALF_UP), change, marketVal.setScale(2, RoundingMode.HALF_UP), getResources().getString(R.string.dollarSign), changeInDollars);
                 tendiesList.add(tender);
             } catch (IOException e) {
                 e.printStackTrace();
