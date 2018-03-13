@@ -1,16 +1,27 @@
 package co.crisdev.stocktendies;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
 /**
  * Created by lee on 2/19/18.
@@ -47,7 +58,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         TextView viewRowHoldingLbl = (TextView) rowView.findViewById(R.id.viewRowHoldingLabel);
         TextView viewRowCostLbl = (TextView) rowView.findViewById(R.id.viewRowCostLabel);
         TextView viewRowChangeLbl = (TextView) rowView.findViewById(R.id.viewRowChangeLabel);
-
+        ImageView viewRowDelete = (ImageView) rowView.findViewById(R.id.viewRowDelete);
 
         sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
 
@@ -63,14 +74,14 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         BigDecimal cost = new BigDecimal(tradePrice).multiply(holdings);
         BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), cost);
 
-        if(buyOrSell.equals("sell")) {
+        if (buyOrSell.equals("sell")) {
             viewRowCostLbl.setText("Proceeds:");
             viewRowChange.setVisibility(View.GONE);
             viewRowChangeLbl.setVisibility(View.GONE);
-        } else if(buyOrSell.equals("buy")) {
-            viewRowChange.setText(String.format("%,.2f", change));
+        } else if (buyOrSell.equals("buy")) {
+            viewRowChange.setText(String.format("%,.2f%%", change));
         }
-        viewRowHoldingLbl.setText(buyOrSell.toUpperCase()+":");
+        viewRowHoldingLbl.setText(buyOrSell.toUpperCase() + ":");
         viewRowHolding.setText(String.format("%,.0f", new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings())));
         viewRowPrice.setText(String.format("$%,.2f", new BigDecimal(tradePrice).setScale(2, RoundingMode.HALF_UP)));
         viewRowNote.setText(viewRowTendiesArrayList.get(position).getNotes());
@@ -78,6 +89,117 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         viewRowCost.setText(String.format("$%,.2f", cost.setScale(2, RoundingMode.HALF_UP)));
 
         MainActivity.updateChangeTextColorNoSymbol(change, viewRowChange);
+
+        viewRowDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Remove from Portfolio")
+                        .setMessage("Do you really remove the " + viewRowTendiesArrayList.get(position).getTicker() + " transaction from your portfolio?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(getContext(), "Removed " + viewRowTendiesArrayList.get(position).getTicker() + " transaction from your portfolio!", Toast.LENGTH_SHORT).show();
+                                Set<String> tendiesSet = new HashSet<>();
+
+                                SharedPreferences.Editor editor;
+                                editor = sharedPreferences.edit();
+                                tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
+
+                                String count = "";
+                                MainActivity.cumulativeMarketValAtTradePrices = BigDecimal.ZERO;
+                                MainActivity.cumulativeMarketValAtCurrPrices = BigDecimal.ZERO;
+
+                                BigDecimal netCost = BigDecimal.ZERO;
+                                BigDecimal totalMarketValue = BigDecimal.ZERO;
+                                BigDecimal totalHoldings = BigDecimal.ZERO;
+                                int positionPlusOne = position + 1;
+
+                                for (String tendie : tendiesSet) {
+                                    try {
+                                        Stock stock = YahooFinance.get(tendie);
+                                        BigDecimal price = stock.getQuote().getPrice();
+                                        BigDecimal changeInDollars = stock.getQuote().getChange();
+                                        int holdings = 0;
+                                        BigDecimal marketVal = BigDecimal.ZERO;
+                                        count = sharedPreferences.getString(viewRowTendiesArrayList.get(position).getTicker() + "_count_", count);
+
+                                        int countNum = Integer.parseInt(count);
+
+                                        for (int i = 1; i <= countNum; i++) {
+                                            if(positionPlusOne == i && viewRowTendiesArrayList.get(position).getTicker().equals(tendie)) {
+                                                editor.remove(tendie + "_holding_count_" + Integer.toString(i)).apply();
+                                                editor.remove(tendie + "_trade_price_count_" + Integer.toString(i)).apply();
+                                                editor.remove(tendie + "_note_count_" + Integer.toString(i)).apply();
+                                                editor.remove(tendie + "_date_count_" + Integer.toString(i)).apply();
+                                                editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(i)).apply();
+                                                int nCount = countNum - 1;
+                                                editor.putString(tendie + "_count_", Integer.toString(nCount)).apply();
+                                            } else {
+                                                String holding = "";
+                                                String tradePrice = "";
+                                                int holdingNum = 0;
+
+                                                holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
+                                                tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
+
+                                                if (holding.isEmpty() && tradePrice.isEmpty()) {
+                                                    holding = "0";
+                                                    tradePrice = "0.00";
+                                                }
+                                                holdingNum = Integer.parseInt(holding);
+                                                holdings += holdingNum;
+
+                                                BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
+                                                BigDecimal holdingBigDecimal = new BigDecimal(holding);
+                                                totalHoldings = totalHoldings.add(holdingBigDecimal);
+
+                                                MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                                                MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
+                                                marketVal = marketVal.add(price.multiply(holdingBigDecimal));
+
+                                                BigDecimal currentMarketVal = price.multiply(holdingBigDecimal);
+                                                netCost = netCost.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                                                totalMarketValue = totalMarketValue.add(currentMarketVal);
+
+                                                MainActivity.totalTendiesChangeInDollars = MainActivity.totalTendiesChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                BigDecimal pAndL = totalMarketValue.subtract(netCost);
+
+
+                                if (!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
+                                    MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, MainActivity.cumulativeMarketValAtTradePrices);
+                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+                                    MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalDayPercentChange, MainActivity.totalTendiesChange);
+                                } else {
+                                    MainActivity.totalTendiesChange.setText("0.00%");
+                                    MainActivity.totalTendiesValue.setText("$0.00");
+                                    MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalTendiesChange);
+                                }
+
+                                //update viewrow views
+                                ViewRow.vrHoldings.setText(String.format("%,.0f", totalHoldings));
+                                ViewRow.vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.HALF_UP).abs()));
+                                ViewRow.vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.HALF_UP)));
+                                ViewRow.vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.HALF_UP)));
+
+                                MainActivity.updateChangeTextColorNoSymbol(pAndL, ViewRow.vrPandL);
+
+                                viewRowTendiesArrayList.remove(position);
+                                ViewRowListAdapter.this.notifyDataSetChanged();
+                                Log.i("DELETE", "delete called from clicking trash can");
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
 
         return rowView;
     }

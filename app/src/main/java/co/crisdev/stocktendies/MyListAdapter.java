@@ -93,95 +93,91 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Remove from Portfolio")
-                        .setMessage("Do you really remove " +  tenderName.getText() + " from your portfolio?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(getContext(), "Removed Tendie: " + tenderName.getText() + " from your portfolio!", Toast.LENGTH_SHORT).show();
-                                Set<String> tendiesSet = new HashSet<>();
+                .setTitle("Remove from Portfolio")
+                .setMessage("Do you really remove " +  tenderName.getText() + " from your portfolio?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Toast.makeText(getContext(), "Removed Tendie: " + tenderName.getText() + " from your portfolio!", Toast.LENGTH_SHORT).show();
+                        Set<String> tendiesSet = new HashSet<>();
 
-                                SharedPreferences.Editor editor;
-                                sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
-                                editor = sharedPreferences.edit();
-                                tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
+                        SharedPreferences.Editor editor;
+                        sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
+                        editor = sharedPreferences.edit();
+                        tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
 
-                                ArrayList<Tender> tendiesList = new ArrayList<Tender>();
-                                tendiesSet = sharedPreferences.getStringSet("tendiesList", tendiesSet);
-                                String count = "";
-                                MainActivity.cumulativeMarketValAtTradePrices = new BigDecimal(0.00);
-                                MainActivity.cumulativeMarketValAtCurrPrices = new BigDecimal(0.00);
+                        String count = "";
+                        MainActivity.cumulativeMarketValAtTradePrices = BigDecimal.ZERO;
+                        MainActivity.cumulativeMarketValAtCurrPrices = BigDecimal.ZERO;
 
 
-                                for(String tendie : tendiesSet) {
-                                    try {
-                                        Stock stock = YahooFinance.get(tendie);
-                                        BigDecimal price = stock.getQuote().getPrice();
-                                        BigDecimal change = stock.getQuote().getChangeInPercent();
-                                        BigDecimal changeInDollars = stock.getQuote().getChange();
-                                        int holdings = 0;
-                                        BigDecimal marketVal = new BigDecimal(0.00);
-                                        count = sharedPreferences.getString(tendie + "_count_", count);
+                        for(String tendie : tendiesSet) {
+                            try {
+                                Stock stock = YahooFinance.get(tendie);
+                                BigDecimal price = stock.getQuote().getPrice();
+                                BigDecimal change = stock.getQuote().getChangeInPercent();
+                                BigDecimal changeInDollars = stock.getQuote().getChange();
+                                int holdings = 0;
+                                BigDecimal marketVal = BigDecimal.ZERO;
+                                count = sharedPreferences.getString(tendie + "_count_", count);
 
-                                        int countNum = Integer.parseInt(count);
-                                        for(int i=1; i<=countNum; i++) {
-                                            if(tendie.equals(tenderName.getText())) {
-                                                editor.remove(tendie + "_holding_count_" + Integer.toString(i)).apply();
-                                                editor.remove(tendie + "_trade_price_count_" + Integer.toString(i)).apply();
-                                                editor.remove(tendie + "_note_count_" + Integer.toString(i)).apply();
-                                                editor.remove(tendie + "_date_count_" + Integer.toString(i)).apply();
-                                                editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(i)).apply();
-                                            }
-                                            String holding = "";
-                                            String tradePrice = "";
-                                            int holdingNum = 0;
-
-                                            holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
-                                            tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
-
-                                            if(holding.isEmpty() && tradePrice.isEmpty()) {
-                                                holding = "0";
-                                                tradePrice = "0.00";
-                                            }
-                                            holdingNum = Integer.parseInt(holding);
-                                            holdings += holdingNum;
-
-                                            BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
-                                            BigDecimal holdingBigDecimal = new BigDecimal(holding);
-
-                                            MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
-                                            MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
-                                            marketVal = marketVal.add(price.multiply(holdingBigDecimal));
-
-                                            MainActivity.totalTendiesChangeInDollars = MainActivity.totalTendiesChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
-                                        }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                int countNum = Integer.parseInt(count);
+                                for(int i=1; i<=countNum; i++) {
+                                    if(tendie.equals(tenderName.getText())) {
+                                        editor.remove(tendie + "_holding_count_" + Integer.toString(i)).apply();
+                                        editor.remove(tendie + "_trade_price_count_" + Integer.toString(i)).apply();
+                                        editor.remove(tendie + "_note_count_" + Integer.toString(i)).apply();
+                                        editor.remove(tendie + "_date_count_" + Integer.toString(i)).apply();
+                                        editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(i)).apply();
                                     }
+                                    String holding = "";
+                                    String tradePrice = "";
+                                    int holdingNum = 0;
+
+                                    holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
+                                    tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
+
+                                    if(holding.isEmpty() && tradePrice.isEmpty()) {
+                                        holding = "0";
+                                        tradePrice = "0.00";
+                                    }
+                                    holdingNum = Integer.parseInt(holding);
+                                    holdings += holdingNum;
+
+                                    BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
+                                    BigDecimal holdingBigDecimal = new BigDecimal(holding);
+
+                                    MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
+                                    MainActivity.cumulativeMarketValAtCurrPrices = MainActivity.cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
+
+                                    MainActivity.totalTendiesChangeInDollars = MainActivity.totalTendiesChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                                if(!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
-                                    BigDecimal y2 = MainActivity.totalTendiesChangeInDollars.add(MainActivity.cumulativeMarketValAtCurrPrices);
-                                    MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, y2);
-                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
-                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
-                                    updatePercentChangeColor(MainActivity.totalDayPercentChange);
-                                } else {
-                                    MainActivity.totalTendiesChange.setText("0.00%");
-                                    MainActivity.totalTendiesValue.setText("$0.00");
-                                    updatePercentChangeColor(BigDecimal.ZERO);
-                                }
+                        if(!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
+                            MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, MainActivity.cumulativeMarketValAtTradePrices);
+                            MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                            MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+                            MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalDayPercentChange, MainActivity.totalTendiesChange);
+                        } else {
+                            MainActivity.totalTendiesChange.setText("0.00%");
+                            MainActivity.totalTendiesValue.setText("$0.00");
+                            MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalTendiesChange);
+                        }
 
 
-                                tendiesSet.remove(tenderName.getText());
-                                editor.putStringSet("tendiesList", tendiesSet).apply();
+                        tendiesSet.remove(tenderName.getText());
+                        editor.putStringSet("tendiesList", tendiesSet).apply();
 
-                                //remove item from list view
-                                tendersArrayList.remove(position);
-                                MyListAdapter.this.notifyDataSetChanged();
-                                Log.i("DELETE", "delete called from clicking trash can");;
-                            }})
-                        .setNegativeButton(android.R.string.no, null).show();
+                        //remove item from list view
+                        tendersArrayList.remove(position);
+                        MyListAdapter.this.notifyDataSetChanged();
+                        Log.i("DELETE", "delete called from clicking trash can");;
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
             }
         });
 

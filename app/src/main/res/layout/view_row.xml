@@ -103,8 +103,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tenderHoldings"
-        app:layout_constraintTop_toBottomOf="@+id/vrHoldings"
-        app:layout_constraintBottom_toTopOf="@+id/vrHorizontalGuideline1"
+        app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/vrHoldings"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrGuideline1"/>
 
@@ -113,26 +113,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/marketVal"
-        app:layout_constraintTop_toBottomOf="@+id/vrMarketValue"
-        app:layout_constraintBottom_toTopOf="@+id/vrHorizontalGuideline1"
-        app:layout_constraintLeft_toRightOf="@+id/vrHoldingsLabel"
-        app:layout_constraintRight_toLeftOf="@+id/vrNetCostLabel"/>
+        app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/vrMarketValue"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline1"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline3"/>
 
     <TextView
         android:id="@+id/vrNetCostLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/netCost"
-        app:layout_constraintTop_toBottomOf="@+id/vrNetCost"
-        app:layout_constraintBottom_toTopOf="@+id/vrHorizontalGuideline1"
+        app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/vrNetCost"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline3"
         app:layout_constraintRight_toLeftOf="@+id/vrGuideline4"/>
 
     <TextView
         android:id="@+id/vrPAndL"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/vrNetCostLabel"
         app:layout_constraintTop_toBottomOf="@+id/vrPandLlabel"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline3"
@@ -141,9 +142,10 @@
 
     <TextView
         android:id="@+id/vrHoldings"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrGuideline1"
@@ -154,9 +156,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline2"
-        app:layout_constraintLeft_toRightOf="@+id/vrHoldings"
-        app:layout_constraintRight_toLeftOf="@+id/vrNetCost"
+        app:layout_constraintLeft_toRightOf="@+id/vrGuideline1"
+        app:layout_constraintRight_toLeftOf="@+id/vrGuideline3"
         app:layout_constraintBottom_toTopOf="@android:id/list" />
 
     <TextView
@@ -164,6 +167,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/vrHorizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@+id/vrGuideline3"
         app:layout_constraintRight_toLeftOf="@+id/vrGuideline4"

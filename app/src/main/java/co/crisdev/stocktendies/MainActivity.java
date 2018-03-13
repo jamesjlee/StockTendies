@@ -185,12 +185,12 @@ public class MainActivity extends ListActivity {
         }
 
 
-        if((cumulativeMarketValAtTradePrices.compareTo(BigDecimal.ZERO) > 0) || (cumulativeMarketValAtTradePrices.compareTo(BigDecimal.ZERO) < 0)) {
+        if((cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) > 0) || (cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) < 0)) {
             totalDayPercentChange = percentChange(cumulativeMarketValAtCurrPrices, cumulativeMarketValAtTradePrices);
             totalTendiesChange.setText(totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString()+"%");
             updateChangeTextColorNoSymbol(totalDayPercentChange, totalTendiesChange);
-            totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.subtract(cumulativeMarketValAtTradePrices).add(cumulativeMarketValAtCurrPrices).setScale(2, RoundingMode.HALF_UP)));
-        } else if(cumulativeMarketValAtTradePrices.compareTo(BigDecimal.ZERO) == 0) {
+            totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+        } else if(cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0) {
             totalTendiesChange.setText("0.00%");
             totalTendiesValue.setText("$0.00");
             updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalTendiesChange);

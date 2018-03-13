@@ -19,6 +19,10 @@ import java.util.ArrayList;
 public class ViewRow extends ListActivity {
     private SharedPreferences sharedPreferences;
     private ArrayList<ViewRowTender> viewRowTendiesList;
+    public static TextView vrMarketValue;
+    public static TextView vrPandL;
+    public static TextView vrNetCost;
+    public static TextView vrHoldings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +30,10 @@ public class ViewRow extends ListActivity {
         setContentView(R.layout.view_row);
 
         TextView vrTendieName = (TextView) findViewById(R.id.vrTendieName);
-        TextView vrMarketValue = (TextView) findViewById(R.id.vrMarketValue);
-        TextView vrPandL = (TextView) findViewById(R.id.vrPAndL);
-        TextView vrNetCost = (TextView) findViewById(R.id.vrNetCost);
-        TextView vrHoldings = (TextView) findViewById(R.id.vrHoldings);
+        vrMarketValue = (TextView) findViewById(R.id.vrMarketValue);
+        vrPandL = (TextView) findViewById(R.id.vrPAndL);
+        vrNetCost = (TextView) findViewById(R.id.vrNetCost);
+        vrHoldings = (TextView) findViewById(R.id.vrHoldings);
 
         String ticker = "";
         String price = "";
@@ -59,9 +63,9 @@ public class ViewRow extends ListActivity {
 
 
         BigDecimal currPrice = new BigDecimal(price.substring(1, price.length()));
-        BigDecimal totalHoldings = new BigDecimal(0);
-        BigDecimal netCost = new BigDecimal(0);
-        BigDecimal totalMarketValue = new BigDecimal(0);
+        BigDecimal totalHoldings = BigDecimal.ZERO;
+        BigDecimal netCost = BigDecimal.ZERO;
+        BigDecimal totalMarketValue = BigDecimal.ZERO;
 
         count = sharedPreferences.getString(ticker + "_count_", count);
 
@@ -85,7 +89,7 @@ public class ViewRow extends ListActivity {
 
             note = sharedPreferences.getString(ticker + "_note_count_" + Integer.toString(i), note);
 
-            BigDecimal percentChange = new BigDecimal(0.00);
+            BigDecimal percentChange = BigDecimal.ZERO;
             if((!(marketVal.compareTo(BigDecimal.ZERO) == 0) && (!(currentMarketVal.compareTo(BigDecimal.ZERO) == 0)))) {
                 percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
             }
