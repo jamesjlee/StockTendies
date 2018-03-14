@@ -134,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal"
+        android:inputType="number"
         android:digits="0123456789."
         app:layout_constraintLeft_toRightOf="@id/tradePriceLabel"
         app:layout_constraintRight_toLeftOf="parent"

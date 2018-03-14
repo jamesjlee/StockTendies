@@ -116,10 +116,6 @@ public class ViewRow extends ListActivity {
             totalMarketValue = BigDecimal.ZERO;
         }
 
-        if(netCost.compareTo(BigDecimal.ZERO) < 0) {
-            netCost = BigDecimal.ZERO;
-        }
-
         vrTendieName.setText(ticker);
         vrHoldings.setText(String.format("%,.0f", totalHoldings));
         vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.HALF_UP).abs()));
