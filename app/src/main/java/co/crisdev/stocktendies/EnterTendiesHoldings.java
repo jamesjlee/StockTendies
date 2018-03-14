@@ -161,7 +161,7 @@ public class EnterTendiesHoldings extends Activity {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     exceptionSpinner.setVisibility(View.GONE);
-                    Toast.makeText(EnterTendiesHoldings.this, "Could not save your precious tendie. Please try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EnterTendiesHoldings.this, "Could not save your transaction. Please try again.", Toast.LENGTH_LONG).show();
                 }
 
             default:

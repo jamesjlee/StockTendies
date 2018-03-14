@@ -106,11 +106,11 @@ public class MainActivity extends ListActivity {
             case R.id.reset:
                 new AlertDialog.Builder(this)
                         .setTitle("Reset Portfolio")
-                        .setMessage("Do you really want to drop all your tendies from your portfolio?")
+                        .setMessage("Do you really want to drop all your holdings from your portfolio?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(MainActivity.this, "Dropped all your tendies.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Dropped all your tendies! Cleared your portfolio.", Toast.LENGTH_SHORT).show();
                                 sharedPreferences.edit().clear().apply();
                                 totalTendiesChange.setText("0.00");
                                 totalTendiesValue.setText("0.00");

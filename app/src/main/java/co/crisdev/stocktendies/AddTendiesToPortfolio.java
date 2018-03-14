@@ -46,7 +46,7 @@ public class AddTendiesToPortfolio extends Activity {
                     spinner.setVisibility(View.GONE);
                     switchView(s, stock.getQuote().getPrice());
                 } else {
-                    Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your precious tendie. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your ticker. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
                     spinner.setVisibility(View.GONE);
                 }
                 return isTender;
