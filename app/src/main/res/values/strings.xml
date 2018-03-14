@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Stock Tendies</string>
-    <string name="totalTendiesValue">Total Tendies Value</string>
+    <string name="totalTendiesValue">Total Portfolio Value</string>
     <string name="dollarSign">$</string>
-    <string name="totalTendiesPercentChange">Total Tendies Change</string>
-    <string name="tendieName">Tendie</string>
+    <string name="totalTendiesPercentChange">Total Portfolio Change</string>
+    <string name="tendieName">Ticker</string>
     <string name="tenderHoldings">Holdings</string>
     <string name="tenderPrices">Price</string>
     <string name="tendiesPercentSymbol">%</string>
@@ -15,12 +15,11 @@
     <string name="aboutTendies">About </string>
     <string name="tendiesPrefs">TendiesPrefsFile</string>
     <string name="tenderDayChange">Change</string>
-    <string name="sharesText">Ts</string>
     <string name="notesLabel">Notes:</string>
     <string name="currentPriceLabel">Current Price:</string>
     <string name="tradePriceLabel">Trade Price:</string>
     <string name="holdingsLabel">Holdings:</string>
-    <string name="saveHoldings">Save</string>
+    <string name="saveHoldings">SAVE</string>
     <string name="pAndL">P/L</string>
     <string name="marketVal">Market Value</string>
     <string name="netCost">Net Cost</string>
