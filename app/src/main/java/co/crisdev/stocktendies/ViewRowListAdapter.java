@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +47,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         View rowView = inflater.inflate(R.layout.view_row_tendies, parent, false);
 
         ViewGroup.LayoutParams params = rowView.getLayoutParams();
-        params.height = 350;
+        params.height = 500;
         rowView.setLayoutParams(params);
 
         TextView viewRowHolding = (TextView) rowView.findViewById(R.id.viewRowHolding);
@@ -73,22 +74,27 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
         BigDecimal holdings = new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings());
         BigDecimal cost = new BigDecimal(tradePrice).multiply(holdings);
+        Double change = Double.parseDouble(viewRowTendiesArrayList.get(position).getChange());
 
         if (buyOrSell.equals("sell")) {
             viewRowCostLbl.setText("Proceeds:");
             viewRowChange.setVisibility(View.GONE);
             viewRowChangeLbl.setVisibility(View.GONE);
         } else if (buyOrSell.equals("buy")) {
-            viewRowChange.setText(String.format("%,.2f%%", new BigDecimal(viewRowTendiesArrayList.get(position).getChange())));
+            if(Double.isInfinite(change) || Double.isNaN(change)) {
+                viewRowChange.setText(change.toString()+"%");
+                MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, viewRowChange);
+            } else {
+                viewRowChange.setText(String.format("%,.2f%%", new BigDecimal(viewRowTendiesArrayList.get(position).getChange())));
+                MainActivity.updateChangeTextColorNoSymbol(new BigDecimal(change.toString()), viewRowChange);
+            }
         }
         viewRowHoldingLbl.setText(buyOrSell.toUpperCase() + ":");
         viewRowHolding.setText(String.format("%,.0f", new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings())));
-        viewRowPrice.setText(String.format("$%,.2f", new BigDecimal(tradePrice).setScale(2, RoundingMode.HALF_UP)));
+        viewRowPrice.setText(String.format("$%,.2f", new BigDecimal(tradePrice).setScale(2, RoundingMode.DOWN)));
         viewRowNote.setText(viewRowTendiesArrayList.get(position).getNotes());
         viewRowDate.setText(date);
-        viewRowCost.setText(String.format("$%,.2f", cost.setScale(2, RoundingMode.HALF_UP)));
-
-        MainActivity.updateChangeTextColorNoSymbol(new BigDecimal(viewRowTendiesArrayList.get(position).getChange()), viewRowChange);
+        viewRowCost.setText(String.format("$%,.2f", cost.setScale(2, RoundingMode.DOWN)));
 
         viewRowDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,15 +206,27 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
                                 BigDecimal pAndL = totalMarketValue.subtract(netCost);
                                 MainActivity.totalTendiesChangeInDollars = MainActivity.cumulativeMarketValAtCurrPrices.subtract(MainActivity.cumulativeMarketValAtTradePrices);
+                                MainActivity.totalPortfolioCost = MainActivity.cumulativeMarketValAtTradePrices;
 
                                 if (!(MainActivity.totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0)) {
-                                    MainActivity.totalPortfolioCost = MainActivity.cumulativeMarketValAtTradePrices;                                    MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtTradePrices, MainActivity.cumulativeMarketValAtCurrPrices);
-                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString()+"%");
-                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+                                    if( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).isInfinite() ||  MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).isNaN()) {
+                                        MainActivity.totalTendiesChange.setText( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).toString()+"%");
+                                    } else {
+                                        MainActivity.totalDayPercentChange = new BigDecimal( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64).setScale(2, RoundingMode.DOWN);
+                                        MainActivity.totalTendiesChange.setText( MainActivity.totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+                                    }                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
                                     MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalTendiesChangeInDollars, MainActivity.totalChangeInCash);
-                                    MainActivity.totalChangeInCash.setText(String.format("$%,.2f", MainActivity.totalTendiesChangeInDollars.setScale(2, RoundingMode.HALF_UP)));
+                                    MainActivity.totalChangeInCash.setText(String.format("$%,.2f", MainActivity.totalTendiesChangeInDollars.setScale(2, RoundingMode.DOWN)));
                                     MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalDayPercentChange, MainActivity.totalTendiesChange);
-                                    MainActivity.totalPortfolioCostTv.setText(String.format("$%,.2f", MainActivity.totalPortfolioCost.setScale(2, RoundingMode.HALF_UP)));
+                                    MainActivity.totalPortfolioCostTv.setText(String.format("$%,.2f", MainActivity.totalPortfolioCost.setScale(2, RoundingMode.DOWN)));
+                                } else if((MainActivity.totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0) && ((MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) > 0) || (MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) < 0))){
+                                    MainActivity.totalChangeInCash.setText("$0.00");
+                                    MainActivity.totalTendiesChange.setText("0.00%");
+                                    MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
+                                    MainActivity.totalPortfolioCostTv.setText(String.format("$%,.2f", MainActivity.totalPortfolioCost.setScale(2, RoundingMode.DOWN)));
+                                    MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalChangeInCash);
+                                    MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalTendiesChange);
                                 } else {
                                     MainActivity.totalChangeInCash.setText("$0.00");
                                     MainActivity.totalTendiesChange.setText("0.00%");
@@ -220,9 +238,9 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
                                 //update viewrow views
                                 ViewRow.vrHoldings.setText(String.format("%,.0f", totalHoldings));
-                                ViewRow.vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.HALF_UP).abs()));
-                                ViewRow.vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.HALF_UP)));
-                                ViewRow.vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.HALF_UP)));
+                                ViewRow.vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.DOWN)));
+                                ViewRow.vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.DOWN)));
+                                ViewRow.vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.DOWN)));
 
                                 MainActivity.updateChangeTextColorNoSymbol(pAndL, ViewRow.vrPandL);
 

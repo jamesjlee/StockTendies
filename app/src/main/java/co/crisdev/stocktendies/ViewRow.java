@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
@@ -92,15 +93,12 @@ public class ViewRow extends ListActivity {
 
             note = sharedPreferences.getString(ticker + "_note_count_" + Integer.toString(i), note);
 
-            BigDecimal percentChange = BigDecimal.ZERO;
-            if((!(marketVal.compareTo(BigDecimal.ZERO) == 0) && (!(currentMarketVal.compareTo(BigDecimal.ZERO) == 0)))) {
-                percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
-            }
+            double percentChange = 0.00;
+            percentChange = MainActivity.percentChange(marketVal, currentMarketVal);
 
             buyOrSell = sharedPreferences.getString(ticker + "_buy_or_sell_count_" + Integer.toString(i), buyOrSell);
 
-            System.out.println("percentage CHANGE:"+ percentChange.toString());
-            viewRowTendiesList.add(new ViewRowTender(ticker, holding.abs().toString(), currPrice.toString(), note, percentChange.toString(), buyOrSell));
+            viewRowTendiesList.add(new ViewRowTender(ticker, holding.abs().toString(), currPrice.toString(), note, Double.toString(percentChange), buyOrSell));
         }
 
         BigDecimal pAndL = totalMarketValue.subtract(netCost);
@@ -115,9 +113,9 @@ public class ViewRow extends ListActivity {
         }
 
         vrTendieName.setText(ticker);
-        vrPrice.setText(currPrice.setScale(2, RoundingMode.DOWN).toString());
+        vrPrice.setText("$"+currPrice.setScale(2, RoundingMode.DOWN).toString());
         vrHoldings.setText(String.format("%,.0f", totalHoldings));
-        vrNetCost.setText(String.format("$%,.2f", netCost.abs().setScale(2, RoundingMode.DOWN)));
+        vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.DOWN)));
         vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.DOWN)));
         vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.DOWN)));
 

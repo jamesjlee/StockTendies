@@ -176,6 +176,7 @@ public class MainActivity extends ListActivity {
                     BigDecimal holdingBigDecimal = new BigDecimal(holding);
 
                     holdings = holdings.add(holdingNum);
+
                     cumulativeMarketValAtTradePrices = cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
                     cumulativeMarketValAtCurrPrices = cumulativeMarketValAtCurrPrices.add(price.multiply(holdingBigDecimal));
                     marketVal = marketVal.add(price.multiply(holdingBigDecimal));
@@ -189,16 +190,27 @@ public class MainActivity extends ListActivity {
         }
 
         totalTendiesChangeInDollars = cumulativeMarketValAtCurrPrices.subtract(cumulativeMarketValAtTradePrices);
+        totalPortfolioCost = cumulativeMarketValAtTradePrices;
 
         if (!(totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0)) {
-            totalPortfolioCost = cumulativeMarketValAtTradePrices;
-            totalDayPercentChange = percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices);
-            totalTendiesChange.setText(totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+            if(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).isInfinite() || percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).isNaN()) {
+                totalTendiesChange.setText(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).toString()+"%");
+            } else {
+                totalDayPercentChange = new BigDecimal(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64).setScale(2, RoundingMode.DOWN);
+                totalTendiesChange.setText(totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+            }
+            updateChangeTextColorNoSymbol(totalDayPercentChange, totalTendiesChange);
             totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
             updateChangeTextColorNoSymbol(totalTendiesChangeInDollars, totalChangeInCash);
             totalChangeInCash.setText(String.format("$%,.2f", totalTendiesChangeInDollars.setScale(2, RoundingMode.DOWN)));
-            updateChangeTextColorNoSymbol(totalDayPercentChange, totalTendiesChange);
             totalPortfolioCostTv.setText(String.format("$%,.2f", totalPortfolioCost.setScale(2, RoundingMode.DOWN)));
+        } else if((totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0) && ((cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) > 0) || (cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) < 0))){
+            totalChangeInCash.setText("$0.00");
+            totalTendiesChange.setText("0.00%");
+            totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
+            totalPortfolioCostTv.setText(String.format("$%,.2f", totalPortfolioCost.setScale(2, RoundingMode.DOWN)));
+            updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalChangeInCash);
+            updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalTendiesChange);
         } else {
             totalChangeInCash.setText("$0.00");
             totalTendiesChange.setText("0.00%");
@@ -214,14 +226,15 @@ public class MainActivity extends ListActivity {
         tendiesRefreshLayout.setRefreshing(false);
     }
 
-    public static BigDecimal percentChange(BigDecimal first, BigDecimal second) {
+    public static Double percentChange(BigDecimal first, BigDecimal second) {
         double firstDouble = first.doubleValue();
         double secondDouble = second.doubleValue();
+        double res = 0.00;
         BigDecimal resBigDecimal = BigDecimal.ZERO;
-        double res = 100 * ((secondDouble - firstDouble)/ firstDouble);
-        resBigDecimal = new BigDecimal(res, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-        return resBigDecimal;
+        res = ((secondDouble-firstDouble)/Math.abs(firstDouble))*100;
+        return res;
     }
+
 
     public static void updateChangeTextColor(BigDecimal percentChange, TextView tv, TextView tv2) {
         if(percentChange.compareTo(BigDecimal.ZERO) > 0) {
@@ -233,6 +246,9 @@ public class MainActivity extends ListActivity {
         } else if (percentChange.compareTo(BigDecimal.ZERO) == 0){
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
             tv2.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
+        } else {
+            tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
+            tv2.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
         }
     }
 
@@ -242,6 +258,8 @@ public class MainActivity extends ListActivity {
         } else if (percentChange.compareTo(BigDecimal.ZERO) < 0) {
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.negative));
         } else if (percentChange.compareTo(BigDecimal.ZERO) == 0){
+            tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
+        } else {
             tv.setTextColor(ContextCompat.getColor(getAppContext(), R.color.neutral));
         }
     }

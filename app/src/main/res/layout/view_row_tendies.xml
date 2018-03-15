@@ -44,49 +44,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline0"
-        app:layout_constraintGuide_percent=".25"
+        app:layout_constraintGuide_percent=".00"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintGuide_percent=".40"
+        app:layout_constraintGuide_percent=".15"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline2"
-        app:layout_constraintGuide_percent=".55"
+        app:layout_constraintGuide_percent=".30"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline3"
-        app:layout_constraintGuide_percent=".70"
+        app:layout_constraintGuide_percent=".45"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline4"
-        app:layout_constraintGuide_percent=".85"
+        app:layout_constraintGuide_percent=".60"
         android:orientation="horizontal"/>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintGuide_percent=".75"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrtHorizontalGuideline6"
+        app:layout_constraintGuide_percent=".90"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vrtHorizontalGuideline7"
         app:layout_constraintGuide_percent="1.00"
         android:orientation="horizontal"/>
 
 
     <TextView
         android:id="@+id/viewRowHoldingLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="right"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
@@ -94,32 +109,35 @@
 
     <TextView
         android:id="@+id/viewRowTradingPriceLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/tradePriceLabel"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline2"
-        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline3" />
-
-
-    <TextView
-        android:id="@+id/viewRowChangeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/change"
+        android:gravity="right"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
+
     <TextView
-        android:id="@+id/viewRowNotesLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/viewRowChangeLabel"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/notesLabel"
+        android:text="@string/change"
+        android:gravity="right"
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline3"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline4"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
+
+    <TextView
+        android:id="@+id/viewRowNotesLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/notesLabel"
+        android:gravity="right"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline6"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
@@ -131,16 +149,16 @@
         app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
         app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
-        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline2" />
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <TextView
         android:id="@+id/viewRowPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline3"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <TextView
@@ -148,10 +166,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline3"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline4"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
-        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline2" />
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <TextView
         android:id="@+id/viewRowNote"
@@ -160,38 +178,40 @@
         android:textColor="#FFFFFF"
         android:maxLength="75"
         app:layout_constraintWidth_default="wrap"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline3"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline6"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <TextView
         android:id="@+id/viewRowCostLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cost"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
-        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline2"
-        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline3" />
+        android:gravity="right"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline3"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
     <TextView
         android:id="@+id/viewRowCost"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
-        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline3"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline2"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline3"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <TextView
         android:id="@+id/viewRowDateLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/date"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline2"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline3"
+        android:gravity="right"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline4"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
@@ -200,18 +220,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline2"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline3"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline4"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline1"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
     <ImageView
         android:id="@+id/viewRowDelete"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="right"
         android:src="@android:drawable/ic_menu_delete"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline4"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline5"
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline6"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline7"
         app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
         app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
 
