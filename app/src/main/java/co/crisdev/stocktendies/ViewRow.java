@@ -1,17 +1,13 @@
 package co.crisdev.stocktendies;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +24,7 @@ public class ViewRow extends ListActivity {
     public static TextView vrPandL;
     public static TextView vrNetCost;
     public static TextView vrHoldings;
+    public static TextView vrPrice;
     public String ticker = "";
     public String price = "";
 
@@ -41,6 +38,7 @@ public class ViewRow extends ListActivity {
         vrPandL = (TextView) findViewById(R.id.vrPAndL);
         vrNetCost = (TextView) findViewById(R.id.vrNetCost);
         vrHoldings = (TextView) findViewById(R.id.vrHoldings);
+        vrPrice = (TextView) findViewById(R.id.vrCurrPrice);
 
 
 
@@ -67,8 +65,7 @@ public class ViewRow extends ListActivity {
             }
         }
 
-
-        BigDecimal currPrice = new BigDecimal(price.substring(1, price.length()));
+        BigDecimal currPrice = new BigDecimal(price.substring(1, price.length())).setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal totalHoldings = BigDecimal.ZERO;
         BigDecimal netCost = BigDecimal.ZERO;
         BigDecimal totalMarketValue = BigDecimal.ZERO;
@@ -88,7 +85,7 @@ public class ViewRow extends ListActivity {
             tradePriceStr = sharedPreferences.getString(ticker + "_trade_price_count_" + Integer.toString(i), tradePriceStr);
             tradePrice = new BigDecimal(tradePriceStr);
 
-            BigDecimal marketVal = holding.multiply(tradePrice);
+            BigDecimal marketVal = tradePrice.multiply(holding);
             BigDecimal currentMarketVal = currPrice.multiply(holding);
             netCost = netCost.add(marketVal);
             totalMarketValue = totalMarketValue.add(currentMarketVal);
@@ -102,6 +99,7 @@ public class ViewRow extends ListActivity {
 
             buyOrSell = sharedPreferences.getString(ticker + "_buy_or_sell_count_" + Integer.toString(i), buyOrSell);
 
+            System.out.println("percentage CHANGE:"+ percentChange.toString());
             viewRowTendiesList.add(new ViewRowTender(ticker, holding.abs().toString(), currPrice.toString(), note, percentChange.toString(), buyOrSell));
         }
 
@@ -117,10 +115,11 @@ public class ViewRow extends ListActivity {
         }
 
         vrTendieName.setText(ticker);
+        vrPrice.setText(currPrice.setScale(2, RoundingMode.DOWN).toString());
         vrHoldings.setText(String.format("%,.0f", totalHoldings));
-        vrNetCost.setText(String.format("$%,.2f", netCost.setScale(2, RoundingMode.HALF_UP).abs()));
-        vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.HALF_UP)));
-        vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.HALF_UP)));
+        vrNetCost.setText(String.format("$%,.2f", netCost.abs().setScale(2, RoundingMode.DOWN)));
+        vrPandL.setText(String.format("$%,.2f", pAndL.setScale(2, RoundingMode.DOWN)));
+        vrMarketValue.setText(String.format("$%,.2f", totalMarketValue.setScale(2, RoundingMode.DOWN)));
 
         MainActivity.updateChangeTextColorNoSymbol(pAndL, vrPandL);
 

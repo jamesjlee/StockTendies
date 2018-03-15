@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Stock Tendies</string>
     <string name="totalTendiesValue">Total Portfolio Value</string>
+    <string name="totalPortfolioCost">Total Portfolio Cost</string>
+    <string name="totalPortfolioChangeInCash">Change in Cash</string>
     <string name="dollarSign">$</string>
     <string name="totalTendiesPercentChange">Total Portfolio Change</string>
     <string name="tendieName">Ticker</string>

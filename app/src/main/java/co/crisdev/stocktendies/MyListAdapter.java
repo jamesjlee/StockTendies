@@ -62,15 +62,6 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
         // add color to percent change
         MainActivity.updateChangeTextColor(tendersArrayList.get(position).getDayChangePercent(), tenderDayChange, tenderPercentSymbol);
 
-        if(tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) > 0) {
-            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.positive));
-        } else if (tendersArrayList.get(position).getDayChangePercent().compareTo(BigDecimal.ZERO) < 0){
-            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.negative));
-        } else {
-            tenderDayChange.setTextColor(ContextCompat.getColor(context, R.color.neutral));
-        }
-
-
         SharedPreferences.Editor editor;
         sharedPreferences = context.getApplicationContext().getSharedPreferences(context.getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -157,14 +148,23 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                             }
                         }
 
-                        if(!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
-                            MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, MainActivity.cumulativeMarketValAtTradePrices);
-                            MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                        MainActivity.totalTendiesChangeInDollars = MainActivity.cumulativeMarketValAtCurrPrices.subtract(MainActivity.cumulativeMarketValAtTradePrices);
+
+                        if (!(MainActivity.totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0)) {
+                            MainActivity.totalPortfolioCost = MainActivity.cumulativeMarketValAtTradePrices;
+                            MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtTradePrices, MainActivity.cumulativeMarketValAtCurrPrices);
+                            MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString()+"%");
                             MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+                            MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalTendiesChangeInDollars, MainActivity.totalChangeInCash);
+                            MainActivity.totalChangeInCash.setText(String.format("$%,.2f", MainActivity.totalTendiesChangeInDollars.setScale(2, RoundingMode.HALF_UP)));
                             MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalDayPercentChange, MainActivity.totalTendiesChange);
+                            MainActivity.totalPortfolioCostTv.setText(String.format("$%,.2f", MainActivity.totalPortfolioCost.setScale(2, RoundingMode.HALF_UP)));
                         } else {
+                            MainActivity.totalChangeInCash.setText("$0.00");
                             MainActivity.totalTendiesChange.setText("0.00%");
                             MainActivity.totalTendiesValue.setText("$0.00");
+                            MainActivity.totalPortfolioCostTv.setText("$0.00");
+                            MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalChangeInCash);
                             MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalTendiesChange);
                         }
 

@@ -35,9 +35,9 @@ public class EnterTendiesHoldings extends Activity {
     private SharedPreferences sharedPreferences;
     private ProgressBar exceptionSpinner;
     private RadioGroup radioGroup;
-    private String from;
-    private String ticker;
-    private String currPrice;
+    public String from;
+    public String ticker;
+    public String currPrice;
 
 
     @Override
@@ -72,8 +72,8 @@ public class EnterTendiesHoldings extends Activity {
                 from = bundle.getString("from");
 
                 tickerTv.setText(ticker.toUpperCase());
-                currPriceTv.setText(String.format("$%,.2f", new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.HALF_UP)));
-                tradePriceEt.setText(new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.HALF_UP).toString());
+                currPriceTv.setText(String.format("$%,.2f", new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.DOWN)));
+                tradePriceEt.setText(new BigDecimal(currPrice.substring(1, currPrice.length())).setScale(2, RoundingMode.DOWN).toString());
                 radioGroup.check(R.id.buyBtn);
             }
         }

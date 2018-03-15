@@ -73,14 +73,13 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
 
         BigDecimal holdings = new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings());
         BigDecimal cost = new BigDecimal(tradePrice).multiply(holdings);
-        BigDecimal change = MainActivity.percentChange(new BigDecimal(viewRowTendiesArrayList.get(position).getPrice()).multiply(holdings), cost);
 
         if (buyOrSell.equals("sell")) {
             viewRowCostLbl.setText("Proceeds:");
             viewRowChange.setVisibility(View.GONE);
             viewRowChangeLbl.setVisibility(View.GONE);
         } else if (buyOrSell.equals("buy")) {
-            viewRowChange.setText(String.format("%,.2f%%", change));
+            viewRowChange.setText(String.format("%,.2f%%", new BigDecimal(viewRowTendiesArrayList.get(position).getChange())));
         }
         viewRowHoldingLbl.setText(buyOrSell.toUpperCase() + ":");
         viewRowHolding.setText(String.format("%,.0f", new BigDecimal(viewRowTendiesArrayList.get(position).getHoldings())));
@@ -89,7 +88,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
         viewRowDate.setText(date);
         viewRowCost.setText(String.format("$%,.2f", cost.setScale(2, RoundingMode.HALF_UP)));
 
-        MainActivity.updateChangeTextColorNoSymbol(change, viewRowChange);
+        MainActivity.updateChangeTextColorNoSymbol(new BigDecimal(viewRowTendiesArrayList.get(position).getChange()), viewRowChange);
 
         viewRowDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +109,7 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
                                 String count = "";
                                 MainActivity.cumulativeMarketValAtTradePrices = BigDecimal.ZERO;
                                 MainActivity.cumulativeMarketValAtCurrPrices = BigDecimal.ZERO;
+                                MainActivity.totalTendiesChangeInDollars = BigDecimal.ZERO;
 
                                 BigDecimal netCost = BigDecimal.ZERO;
                                 BigDecimal totalMarketValue = BigDecimal.ZERO;
@@ -191,8 +191,6 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
                                                 BigDecimal currentMarketVal = price.multiply(holdingBigDecimal);
                                                 netCost = netCost.add(tradePriceBigDecimal.multiply(holdingBigDecimal));
                                                 totalMarketValue = totalMarketValue.add(currentMarketVal);
-
-                                                MainActivity.totalTendiesChangeInDollars = MainActivity.totalTendiesChangeInDollars.add(holdingBigDecimal.multiply(changeInDollars)).abs();
                                             }
                                         }
                                     } catch (IOException e) {
@@ -201,16 +199,22 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
                                 }
 
                                 BigDecimal pAndL = totalMarketValue.subtract(netCost);
+                                MainActivity.totalTendiesChangeInDollars = MainActivity.cumulativeMarketValAtCurrPrices.subtract(MainActivity.cumulativeMarketValAtTradePrices);
 
-
-                                if (!(MainActivity.cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) == 0)) {
-                                    MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtCurrPrices, MainActivity.cumulativeMarketValAtTradePrices);
-                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString());
+                                if (!(MainActivity.totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0)) {
+                                    MainActivity.totalPortfolioCost = MainActivity.cumulativeMarketValAtTradePrices;                                    MainActivity.totalDayPercentChange = MainActivity.percentChange(MainActivity.cumulativeMarketValAtTradePrices, MainActivity.cumulativeMarketValAtCurrPrices);
+                                    MainActivity.totalTendiesChange.setText(MainActivity.totalDayPercentChange.setScale(2, RoundingMode.HALF_UP).toString()+"%");
                                     MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.HALF_UP)));
+                                    MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalTendiesChangeInDollars, MainActivity.totalChangeInCash);
+                                    MainActivity.totalChangeInCash.setText(String.format("$%,.2f", MainActivity.totalTendiesChangeInDollars.setScale(2, RoundingMode.HALF_UP)));
                                     MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalDayPercentChange, MainActivity.totalTendiesChange);
+                                    MainActivity.totalPortfolioCostTv.setText(String.format("$%,.2f", MainActivity.totalPortfolioCost.setScale(2, RoundingMode.HALF_UP)));
                                 } else {
+                                    MainActivity.totalChangeInCash.setText("$0.00");
                                     MainActivity.totalTendiesChange.setText("0.00%");
                                     MainActivity.totalTendiesValue.setText("$0.00");
+                                    MainActivity.totalPortfolioCostTv.setText("$0.00");
+                                    MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalChangeInCash);
                                     MainActivity.updateChangeTextColorNoSymbol(BigDecimal.ZERO, MainActivity.totalTendiesChange);
                                 }
 
