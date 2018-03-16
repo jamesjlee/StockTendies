@@ -89,7 +89,7 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Toast.makeText(getContext(), "Removed Tendie: " + tenderName.getText() + " from your portfolio!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Removed " + tenderName.getText() + " from your portfolio!", Toast.LENGTH_SHORT).show();
                         Set<String> tendiesSet = new HashSet<>();
 
                         SharedPreferences.Editor editor;
