@@ -196,8 +196,8 @@ public class MainActivity extends ListActivity {
             if(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).isInfinite() || percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).isNaN()) {
                 totalTendiesChange.setText(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices).toString()+"%");
             } else {
-                totalDayPercentChange = new BigDecimal(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64).setScale(2, RoundingMode.DOWN);
-                totalTendiesChange.setText(totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+                totalDayPercentChange = new BigDecimal(percentChange(cumulativeMarketValAtTradePrices, cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64);
+                totalTendiesChange.setText(String.format("%,.2f%%", totalDayPercentChange));
             }
             updateChangeTextColorNoSymbol(totalDayPercentChange, totalTendiesChange);
             totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
@@ -205,6 +205,7 @@ public class MainActivity extends ListActivity {
             totalChangeInCash.setText(String.format("$%,.2f", totalTendiesChangeInDollars.setScale(2, RoundingMode.DOWN)));
             totalPortfolioCostTv.setText(String.format("$%,.2f", totalPortfolioCost.setScale(2, RoundingMode.DOWN)));
         } else if((totalTendiesChangeInDollars.compareTo(BigDecimal.ZERO) == 0) && ((cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) > 0) || (cumulativeMarketValAtCurrPrices.compareTo(BigDecimal.ZERO) < 0))){
+            System.out.println("there");
             totalChangeInCash.setText("$0.00");
             totalTendiesChange.setText("0.00%");
             totalTendiesValue.setText(String.format("$%,.2f", cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
@@ -212,6 +213,7 @@ public class MainActivity extends ListActivity {
             updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalChangeInCash);
             updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalTendiesChange);
         } else {
+            System.out.println("fair");
             totalChangeInCash.setText("$0.00");
             totalTendiesChange.setText("0.00%");
             totalTendiesValue.setText("$0.00");
@@ -231,7 +233,7 @@ public class MainActivity extends ListActivity {
         double secondDouble = second.doubleValue();
         double res = 0.00;
         BigDecimal resBigDecimal = BigDecimal.ZERO;
-        res = ((secondDouble-firstDouble)/Math.abs(firstDouble))*100;
+        res = ((secondDouble-firstDouble) / Math.abs(firstDouble)) *100.00;
         return res;
     }
 

@@ -155,8 +155,8 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                             if( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).isInfinite() ||  MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).isNaN()) {
                                 MainActivity.totalTendiesChange.setText( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices).toString()+"%");
                             } else {
-                                MainActivity.totalDayPercentChange = new BigDecimal( MainActivity.percentChange( MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64).setScale(2, RoundingMode.DOWN);
-                                MainActivity.totalTendiesChange.setText( MainActivity.totalDayPercentChange.setScale(2, RoundingMode.DOWN).toString()+"%");
+                                MainActivity.totalDayPercentChange = new BigDecimal(MainActivity.percentChange(MainActivity.cumulativeMarketValAtTradePrices,  MainActivity.cumulativeMarketValAtCurrPrices), MathContext.DECIMAL64);
+                                MainActivity.totalTendiesChange.setText(String.format("%,.2f%%", MainActivity.totalDayPercentChange));
                             }
                             MainActivity.totalTendiesValue.setText(String.format("$%,.2f", MainActivity.cumulativeMarketValAtCurrPrices.setScale(2, RoundingMode.DOWN)));
                             MainActivity.updateChangeTextColorNoSymbol(MainActivity.totalTendiesChangeInDollars, MainActivity.totalChangeInCash);
