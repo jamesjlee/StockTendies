@@ -28,4 +28,6 @@
     <string name="change">Change:</string>
     <string name="date">Date:</string>
     <string name="cost">Cost:</string>
+    <string name="holdings">Holdings</string>
+    <string name="details">Details</string>
 </resources>

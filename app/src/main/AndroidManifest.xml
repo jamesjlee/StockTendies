@@ -32,6 +32,9 @@
         <activity android:name=".AboutPage"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".Details"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

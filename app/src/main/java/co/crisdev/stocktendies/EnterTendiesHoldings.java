@@ -1,5 +1,6 @@
 package co.crisdev.stocktendies;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,9 @@ public class EnterTendiesHoldings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.enter_tendies_holdings);
 
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         tickerTv = (TextView) findViewById(R.id.ticker);
         currPriceTv = (TextView) findViewById(R.id.currentPrice);
@@ -88,6 +92,9 @@ public class EnterTendiesHoldings extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
             case R.id.home:
                 Intent intentHome = new Intent(this, MainActivity.class);
                 startActivity(intentHome);

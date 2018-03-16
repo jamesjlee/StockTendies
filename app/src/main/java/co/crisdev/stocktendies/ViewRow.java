@@ -1,12 +1,17 @@
 package co.crisdev.stocktendies;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
@@ -28,11 +33,15 @@ public class ViewRow extends ListActivity {
     public static TextView vrPrice;
     public String ticker = "";
     public String price = "";
+    public static ProgressBar vrSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_row);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         TextView vrTendieName = (TextView) findViewById(R.id.vrTendieName);
         vrMarketValue = (TextView) findViewById(R.id.vrMarketValue);
@@ -40,7 +49,7 @@ public class ViewRow extends ListActivity {
         vrNetCost = (TextView) findViewById(R.id.vrNetCost);
         vrHoldings = (TextView) findViewById(R.id.vrHoldings);
         vrPrice = (TextView) findViewById(R.id.vrCurrPrice);
-
+        vrSpinner = (ProgressBar) findViewById(R.id.vrSpinner);
 
 
         BigDecimal holding = BigDecimal.ZERO;
@@ -65,6 +74,7 @@ public class ViewRow extends ListActivity {
                 price = bundle.getString("price");
             }
         }
+
 
         BigDecimal currPrice = new BigDecimal(price.substring(1, price.length())).setScale(2, BigDecimal.ROUND_CEILING);
         BigDecimal totalHoldings = BigDecimal.ZERO;
@@ -134,9 +144,18 @@ public class ViewRow extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.homeViewRow:
-                Intent intent = new Intent(ViewRow.this, MainActivity.class);
-                startActivity(intent);
+            case android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.detailsOnViewRow:
+                vrSpinner.setVisibility(View.VISIBLE);
+                Intent intentBundle2 = new Intent(ViewRow.this, Details.class);
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("ticker", ticker);
+                bundle2.putString("price", price.toString());
+                bundle2.putString("from", "viewRow");
+                intentBundle2.putExtras(bundle2);
+                startActivity(intentBundle2);
                 break;
             case R.id.addOnViewRow:
                 Intent intentBundle = new Intent(ViewRow.this, EnterTendiesHoldings.class);

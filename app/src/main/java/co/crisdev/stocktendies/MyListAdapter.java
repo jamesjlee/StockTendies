@@ -120,6 +120,7 @@ public class MyListAdapter extends ArrayAdapter<Tender>  {
                                         editor.remove(tendie + "_note_count_" + Integer.toString(i)).apply();
                                         editor.remove(tendie + "_date_count_" + Integer.toString(i)).apply();
                                         editor.remove(tendie + "_buy_or_sell_count_" + Integer.toString(i)).apply();
+                                        editor.remove(tendie + "_timeframe_").apply();
                                     }
                                     String holding = "";
                                     String tradePrice = "";

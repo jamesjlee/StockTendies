@@ -1,5 +1,6 @@
 package co.crisdev.stocktendies;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -34,6 +35,9 @@ public class AddTendiesToPortfolio extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tendies_to_portfolio);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         searchViewForTendies = (SearchView) findViewById(R.id.searchForTendies);
         spinner = (ProgressBar) findViewById(R.id.addToPortfolioSpinner);
@@ -72,12 +76,9 @@ public class AddTendiesToPortfolio extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.searchHome:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+            case android.R.id.home:
+                this.finish();
+                return true;
         }
 
         return true;

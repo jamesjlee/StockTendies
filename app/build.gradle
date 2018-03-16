@@ -6,8 +6,8 @@ android {
         applicationId "co.crisdev.stocktendies"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     // https://mvnrepository.com/artifact/com.yahoofinance-api/YahooFinanceAPI
     compile 'com.yahoofinance-api:YahooFinanceAPI:3.12.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }
