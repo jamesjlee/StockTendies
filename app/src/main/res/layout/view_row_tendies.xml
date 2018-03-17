@@ -231,11 +231,10 @@
         android:layout_height="30dp"
         android:gravity="right"
         android:src="@android:drawable/ic_menu_delete"
-        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline6"
-        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline7"
-        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline0"
-        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline1" />
-
+        app:layout_constraintTop_toBottomOf="@+id/vrtHorizontalGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/vrtHorizontalGuideline2"
+        app:layout_constraintLeft_toRightOf="@+id/vrtGuideline3"
+        app:layout_constraintRight_toLeftOf="@+id/vrtGuideline4" />
 
 </android.support.constraint.ConstraintLayout>
 

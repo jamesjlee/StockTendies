@@ -84,7 +84,7 @@
         app:layout_constraintGuide_percent="1.00"
         android:orientation="horizontal"/>
 
-    <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/webview"
         android:layout_width="0dp"
         android:layout_height="0dp"
