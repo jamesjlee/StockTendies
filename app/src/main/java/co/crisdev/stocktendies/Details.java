@@ -49,7 +49,7 @@ public class Details extends Activity  {
         String htmlString = "<!-- TradingView Widget BEGIN -->\n" +
                 "<div class=\"tradingview-widget-container\">\n" +
                 "  <div id=\"tradingview_1f617\"></div>\n" +
-                "  <div class=\"tradingview-widget-copyright\"><a href=\"https://www.tradingview.com/symbols/NASDAQ-\"+ticker+\"/\" rel=\"noopener\" target=\"_blank\"><span class=\"blue-text\">\"+ticker+\"</span> <span class=\"blue-text\">chart</span> by TradingView</a></div>\n" +
+                "  <div class=\"tradingview-widget-copyright\"><a href=\"https://www.tradingview.com/symbols/NASDAQ-"+ticker+"/\" rel=\"noopener\" target=\"_blank\"><span class=\"blue-text\">"+ticker+"</span> <span class=\"blue-text\">chart</span> by TradingView</a></div>\n" +
                 "  <script type=\"text/javascript\" src=\"https://s3.tradingview.com/tv.js\"></script>\n" +
                 "  <script type=\"text/javascript\">\n" +
                 "  new TradingView.widget(\n" +
