@@ -84,59 +84,11 @@
         app:layout_constraintGuide_percent="1.00"
         android:orientation="horizontal"/>
 
-    <TextView
-        android:id="@+id/detailsTicker"
-        android:layout_width="wrap_content"
+    <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/webview"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline1"
-        app:layout_constraintLeft_toRightOf="@id/dGuideline0"
-        app:layout_constraintRight_toLeftOf="@id/dGuideline2" />
-
-    <TextView
-        android:id="@+id/detailsPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="0.00"
-        app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline2"
-        app:layout_constraintLeft_toRightOf="@id/dGuideline0"
-        app:layout_constraintRight_toLeftOf="@id/dGuideline2"/>
-
-    <TextView
-        android:id="@+id/detailsChange"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="0.00%"
-        app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline1"
-        app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline2"
-        app:layout_constraintLeft_toRightOf="@id/dGuideline2"
-        app:layout_constraintRight_toLeftOf="@id/dGuideline4"/>
-
-    <Spinner
-        android:id="@+id/detailsSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline0"
-        app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline1"
-        app:layout_constraintLeft_toRightOf="@id/dGuideline2"
-        app:layout_constraintRight_toLeftOf="@id/dGuideline4"/>
-
-    <ProgressBar
-        android:id="@+id/detailsProgressSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline2"
-        app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline5"
-        app:layout_constraintLeft_toRightOf="@id/dGuideline1"
-        app:layout_constraintRight_toLeftOf="@id/dGuideline3"/>
-
-    <com.github.mikephil.charting.charts.CandleStickChart
-        android:id="@+id/detailsChart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/dHorizontalGuideline2"
         app:layout_constraintBottom_toTopOf="@id/dHorizontalGuideline5"
         app:layout_constraintLeft_toRightOf="@id/dGuideline0"
         app:layout_constraintRight_toLeftOf="@id/dGuideline4" />

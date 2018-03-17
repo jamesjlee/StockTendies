@@ -33,5 +33,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     // https://mvnrepository.com/artifact/com.yahoofinance-api/YahooFinanceAPI
     compile 'com.yahoofinance-api:YahooFinanceAPI:3.12.3'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }
