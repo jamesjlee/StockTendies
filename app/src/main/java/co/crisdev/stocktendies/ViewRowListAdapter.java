@@ -175,19 +175,29 @@ public class ViewRowListAdapter extends ArrayAdapter<ViewRowTender> {
                                                 String holding = "";
                                                 String tradePrice = "";
                                                 int holdingNum = 0;
+                                                String buyOrSell = "";
 
                                                 holding = sharedPreferences.getString(tendie + "_holding_count_" + Integer.toString(i), holding);
                                                 tradePrice = sharedPreferences.getString(tendie + "_trade_price_count_" + Integer.toString(i), tradePrice);
+                                                buyOrSell = sharedPreferences.getString(tendie + "_buy_or_sell_count_" + Integer.toString(i), buyOrSell);
 
                                                 if (holding.isEmpty() && tradePrice.isEmpty()) {
                                                     holding = "0";
                                                     tradePrice = "0.00";
                                                 }
-                                                holdingNum = Integer.parseInt(holding);
-                                                holdings += holdingNum;
+
+
+                                                if(buyOrSell.equals("buy")) {
+                                                    holdingNum = Integer.parseInt(holding);
+                                                    holdings -= holdingNum;
+                                                } else if(buyOrSell.equals("sell")) {
+                                                    holdingNum = Integer.parseInt(holding);
+                                                    holdings -= holdingNum;
+                                                }
 
                                                 BigDecimal tradePriceBigDecimal = new BigDecimal(tradePrice);
                                                 BigDecimal holdingBigDecimal = new BigDecimal(holding);
+
                                                 totalHoldings = totalHoldings.add(holdingBigDecimal);
 
                                                 MainActivity.cumulativeMarketValAtTradePrices = MainActivity.cumulativeMarketValAtTradePrices.add(tradePriceBigDecimal.multiply(holdingBigDecimal));

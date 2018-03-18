@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -131,6 +133,7 @@ public class ViewRow extends ListActivity {
         ViewRowListAdapter listAdapter = new ViewRowListAdapter(this, viewRowTendiesList);
         setListAdapter(listAdapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

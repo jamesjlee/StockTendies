@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -62,15 +64,36 @@ public class MainActivity extends ListActivity {
         totalDayPercentChange = BigDecimal.ZERO;
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.tendiesPrefs), Context.MODE_PRIVATE);
 
-        new loadingTask().doInBackground();
+
+
+        if(isNetworkAvailable()) {
+            tendiesRefreshLayout.setRefreshing(true);
+            new loadingTask().doInBackground();
+        } else {
+            tendiesRefreshLayout.setRefreshing(false);
+            Toast.makeText(MainActivity.this, "No internet connectivity! Please connect to the internet and try again!", Toast.LENGTH_LONG).show();
+        }
 
         tendiesRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new loadingTask().doInBackground();
+                if(isNetworkAvailable()) {
+                    tendiesRefreshLayout.setRefreshing(true);
+                    new loadingTask().doInBackground();
+                } else {
+                    tendiesRefreshLayout.setRefreshing(false);
+                    Toast.makeText(MainActivity.this, "No internet connectivity! Please connect to the internet and try again!", Toast.LENGTH_LONG).show();
+                }
                 Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout on refresh listener");
             }
         });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private class loadingTask extends AsyncTask<String, String, String> {
@@ -88,7 +111,13 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new loadingTask().doInBackground();
+        if(isNetworkAvailable()) {
+            tendiesRefreshLayout.setRefreshing(true);
+            new loadingTask().doInBackground();
+        } else {
+            tendiesRefreshLayout.setRefreshing(false);
+            Toast.makeText(MainActivity.this, "No internet connectivity! Please connect to the internet and try again!", Toast.LENGTH_LONG).show();
+        }
         Log.i("onResume", "onRefresh called from SwipeRefreshLayout on onResume");
     }
 
@@ -106,23 +135,30 @@ public class MainActivity extends ListActivity {
                 startActivity(intent);
                 break;
             case R.id.reset:
-                new AlertDialog.Builder(this)
+                if(isNetworkAvailable()) {
+                    new AlertDialog.Builder(this)
                         .setTitle("Reset Portfolio")
                         .setMessage("Do you really want to drop all your holdings from your portfolio?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(MainActivity.this, "Reset your entire portfolio!", Toast.LENGTH_SHORT).show();
-                                sharedPreferences.edit().clear().apply();
-                                totalTendiesChange.setText("0.00%");
-                                totalTendiesValue.setText("$0.00");
-                                totalChangeInCash.setText("$0.00");
-                                totalPortfolioCostTv.setText("$0.00");
-                                updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalChangeInCash);
-                                updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalTendiesChange);
-                                new loadingTask().doInBackground();
-                            }})
+                                    tendiesRefreshLayout.setRefreshing(true);
+                                    Toast.makeText(MainActivity.this, "Reset your entire portfolio!", Toast.LENGTH_SHORT).show();
+                                    sharedPreferences.edit().clear().apply();
+                                    totalTendiesChange.setText("0.00%");
+                                    totalTendiesValue.setText("$0.00");
+                                    totalChangeInCash.setText("$0.00");
+                                    totalPortfolioCostTv.setText("$0.00");
+                                    updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalChangeInCash);
+                                    updateChangeTextColorNoSymbol(BigDecimal.ZERO, totalTendiesChange);
+                                    new loadingTask().doInBackground();
+                                }
+                            })
                         .setNegativeButton(android.R.string.no, null).show();
+                } else {
+                    tendiesRefreshLayout.setRefreshing(false);
+                    Toast.makeText(MainActivity.this, "No internet connectivity! Please connect to the internet and try again!", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.about:
                 Intent aboutIntent = new Intent(this, AboutPage.class);
@@ -136,7 +172,6 @@ public class MainActivity extends ListActivity {
     }
 
     public void loadSwipeRefreshLayout() {
-        tendiesRefreshLayout.setRefreshing(true);
         Set<String> tendiesSet = new LinkedHashSet<>();
         String count = "";
 

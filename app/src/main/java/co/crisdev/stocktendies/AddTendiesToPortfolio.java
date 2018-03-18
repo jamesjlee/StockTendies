@@ -2,8 +2,11 @@ package co.crisdev.stocktendies;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,15 +48,19 @@ public class AddTendiesToPortfolio extends Activity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 boolean isTender = false;
-                spinner.setVisibility(View.VISIBLE);
-                Stock stock = new loadingTask().doInBackground(s);
-                if(stock != null && stock.getQuote() != null && stock.getQuote().getPrice() != null) {
-                    isTender = true;
-                    spinner.setVisibility(View.GONE);
-                    switchView(s, stock.getQuote().getPrice());
+                if(isNetworkAvailable()) {
+                    spinner.setVisibility(View.VISIBLE);
+                    Stock stock = new loadingTask().doInBackground(s);
+                    if(stock != null && stock.getQuote() != null && stock.getQuote().getPrice() != null) {
+                        isTender = true;
+                        spinner.setVisibility(View.GONE);
+                        switchView(s, stock.getQuote().getPrice());
+                    } else {
+                        Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your ticker. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
+                        spinner.setVisibility(View.GONE);
+                    }
                 } else {
-                    Toast.makeText(AddTendiesToPortfolio.this, "Couldn't find your ticker. Please enter a valid ticker that's in the NASDAQ, or try again.", Toast.LENGTH_SHORT).show();
-                    spinner.setVisibility(View.GONE);
+                    Toast.makeText(AddTendiesToPortfolio.this, "No internet connectivity! Please connect to the internet and try again!", Toast.LENGTH_LONG).show();
                 }
                 return isTender;
             }
@@ -63,6 +70,13 @@ public class AddTendiesToPortfolio extends Activity {
                 return false;
             }
         });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override
