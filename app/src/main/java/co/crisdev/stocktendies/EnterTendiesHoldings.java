@@ -81,6 +81,7 @@ public class EnterTendiesHoldings extends Activity {
                 radioGroup.check(R.id.buyBtn);
             }
         }
+        holdingsTv.requestFocus();
     }
 
     @Override
