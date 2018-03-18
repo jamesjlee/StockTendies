@@ -147,6 +147,10 @@ public class ViewRow extends ListActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.viewRowHome:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
             case R.id.detailsOnViewRow:
                 vrSpinner.setVisibility(View.VISIBLE);
                 Intent intentBundle2 = new Intent(ViewRow.this, Details.class);
