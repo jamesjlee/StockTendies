@@ -42,7 +42,6 @@
         app:layout_constraintGuide_percent="0.75"
         android:orientation="vertical"/>
 
-
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,16 +62,19 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintRight_toLeftOf="@+id/rGuideline0"
-        app:layout_constraintLeft_toRightOf="@+id/rGuideline1" />
+        app:layout_constraintLeft_toRightOf="@+id/rGuideline1"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/rowTenderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/tenderName"
         app:layout_constraintLeft_toRightOf="@+id/rGuideline0"
-        app:layout_constraintRight_toLeftOf="@+id/rGuideline2">
+        app:layout_constraintRight_toLeftOf="@+id/rGuideline2"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
     </TextView>
 
     <TextView
@@ -81,9 +83,9 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/tenderHoldingsText"
         app:layout_constraintStart_toEndOf="@+id/rGuideline2"
-        app:layout_constraintEnd_toEndOf="@+id/rGuideline3">
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline3"
+        app:layout_constraintBottom_toTopOf="@+id/tenderHoldingsText">
     </TextView>
 
     <TextView
@@ -104,9 +106,10 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/tenderDayChange"
         app:layout_constraintStart_toEndOf="@+id/rGuideline4"
         app:layout_constraintEnd_toEndOf="@+id/rGuideline3"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         >
     </TextView>
 
@@ -117,9 +120,11 @@
         android:textSize="12sp"
         android:text="0.00"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
+        android:textAlignment="center"
         app:layout_constraintStart_toEndOf="@+id/rGuideline4"
-        app:layout_constraintEnd_toEndOf="@+id/rGuideline5">
+        app:layout_constraintEnd_toEndOf="@+id/rGuideline5"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
     </TextView>
 
     <ImageView
@@ -127,9 +132,11 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@android:drawable/ic_menu_delete"
-        app:layout_constraintTop_toBottomOf="@+id/tenderPrice"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/rGuideline5"
-        app:layout_constraintRight_toLeftOf="@+id/rGuideline6"/>
+        app:layout_constraintRight_toLeftOf="@+id/rGuideline6"
+        app:layout_constraintBottom_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
 
