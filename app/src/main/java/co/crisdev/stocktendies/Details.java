@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 
 import static co.crisdev.stocktendies.ViewRow.vrSpinner;
 
